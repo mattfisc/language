@@ -15,7 +15,8 @@ public class Prac {
      */
     public static void main(String[] args) {
         double x = 1/3;
-        
+        String m = "234";
+        String asd = ""+m.charAt(0);
         System.out.println(x);
     }
     
