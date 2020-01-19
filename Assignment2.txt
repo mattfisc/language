@@ -1,0 +1,23 @@
+Assignment 2
+Matthew Fischer
+CS 340
+
+Assembly language
+
+00	register1
+01	register2
+02	add
+03	sub
+04	multiply
+05	divide
+06	answer
+07	clear
+08	copy input1
+09	copy input 2
+
+
+
+Program 1
+
+
+
