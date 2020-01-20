@@ -10,13 +10,17 @@ Assembly language
 03	sub
 04	multiply
 05	divide
-06	answer
-07	clear
+06	load instance(load value to address)
+07	load from memory(load memory to address)
+08	
+09	quit program
 
 
 
 
-Program 1
 
+Program 1 starts at 100
+address
+100	0
 
 
