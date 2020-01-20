@@ -6,10 +6,10 @@ Assembly language
 
 00	register1
 01	register2
-02	add
-03	sub
-04	multiply
-05	divide
+02	add		(addressA + addressB and saved in second address)
+03	sub		(addressA - addressB and saved in second address)
+04	multiply	(addressA * addressB and saved in second address)
+05	divide		(addressA / addressB and saved in second address)
 06	load instance(load value to address)
 07	load from memory(load memory to address)
 08	
@@ -20,7 +20,10 @@ Assembly language
 
 
 Program 1 starts at 100
-address
-100	0
+address	
 
-
+100	06 000 010	(10 goes to register1 at address 000)
+101	06 001 002	(2 goes to register2 at address 001) 
+102	04 000 001	(r1 * r2 saved in  address 001)
+103	06 000 005	(5 goes to register1 at address 000)
+104	03 001 000	(r2 - r1 and saved in register
