@@ -4,26 +4,65 @@ CS 340
 
 Assembly language
 
-00	register1
-01	register2
+00	r1
+01	r2
 02	add		(addressA + addressB and saved in second address)
 03	sub		(addressA - addressB and saved in second address)
 04	multiply	(addressA * addressB and saved in second address)
 05	divide		(addressA / addressB and saved in second address)
-06	load instance(load value to address)
-07	load from memory(load memory to address)
-08	
+06	load instance (load value to address)
+07	load from memory (load memory to address)
+08	save from register to memory
 09	quit program
+10	square number	(addressA * addressA and saved in addressA)
 
 
 
 
 
-Program 1 starts at 100
-address	
+Program 1 starts at 100 and 8 digit 
 
-100	06 000 010	(10 goes to register1 at address 000)
-101	06 001 002	(2 goes to register2 at address 001) 
+address			10 * 2 - 5 / 3 + 12
+100	06 000 010	(load 10 goes to r1 at address 000)
+101	06 001 002	(load 2 goes to r2 at address 001) 
 102	04 000 001	(r1 * r2 saved in  address 001)
-103	06 000 005	(5 goes to register1 at address 000)
-104	03 001 000	(r2 - r1 and saved in register
+103	06 000 005	(load 5 goes to register1 at address 000)
+104	03 001 000	(r2 - r1 and 15 is saved in address 000)
+105	06 000 003	(load 3 into address 001)
+106	05 000 001	(r1 / r2 and 5 is saved into address 001)
+107 	06 000 012	(load 12 into address 000)
+108 	02 000 001	(r1 + r2 and saved into address 001)
+109 	08 001 400	(17 saved from address 001 into address 400)
+110 	09 000 000	(quit program)
+
+Program 2 starts at 200
+
+address			50 + 10 + 17 - 57 ^ 2
+200	06 000 050	(load 50 goes to r1 at address 000)
+201	06 001 010	(load 10 goes to r2 at address 001)
+202 	02 000 001	(r1 + r2 saved into at address 001)
+203	07 400 000	(load address 400 and save to address 000)
+203	03 001 000	(r2 - r1 and 43 is saved into address 000)
+204 	06 001 107	(load 57 into address 001)
+205 	03 001 000	(r2 - r1 and 20 is saved into address 000)
+206	10 000 000	(r1 * r1 and 400 saved in r1)
+207	06 001 100	(load 100 into r1 at address 000)
+208	05 000 001	(r1 / r1 and 4 goes to address 001)
+209	08 001 500	(save 4 from address 001 to address 500)
+209	09 000 000	(quit program)
+
+Program 3 starts at 300
+address
+300	07 400 000	(load 17 from memory to register1 at address 000)
+301	07 500 001	(load 4 from memory to register1 at address 001)
+302	02 000 001	(r1 + r2 and 21 is saved into r2 at address 001)
+303	06 000 003	(load 3 into address 000 r1)
+304	05 001 000	(r2 / r1 and 7 is saved into r1 at address 000)
+305	06 000 006	(load 6 into address 000, r1, lose data in address 000 which was 7)
+305	03 001 000	(r2 - r1 and (21-6) 15 is saved into address 000)
+306	03 001 000	(r2 - r1 and (15-6) 9 is saved into address 000)
+307	10 000 000	(r1 * r1 and 81 is saved into address 000)
+308	07 500 001	(load 4 from memory at address 500 to r2)
+309	02 000 001	(r1 - r2 and 77 is saved into address 001)
+310	09 000 000	(quit program)
+ 
