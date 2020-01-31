@@ -2,21 +2,38 @@
  * By:     Matthew Fischer
  * Date:   
  */
-package assignment3;
+package methodfile;
 
 import java.io.File;
 import java.util.Scanner;
 
-//00	r1
-//01	r2
-public class Main {
+/**
+ *
+ * @author Matthew Fischer
+ */
+public class MethodFile {
 
-    
+    /**
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
-        Scanner x;
+        MethodFile m = new MethodFile();
         
         // READ FILE
-        File file = new File("opcode.txt");
+        File file1 = new File("opcode1.txt");
+        m.opcode(file1);
+        
+        File file2 = new File("opcode2.txt");
+        m.opcode(file2);
+        
+        File file3 = new File("opcode3.txt");
+        m.opcode(file3);
+    }
+    
+    public void opcode(File file){
+        Scanner x;
+        
+        
         
         // REGISTER 1
         String register1 = "";
@@ -180,7 +197,6 @@ public class Main {
         catch(Exception e){
             System.out.println("error in reading" + e);
         }
-        
     }
-   
+    
 }
