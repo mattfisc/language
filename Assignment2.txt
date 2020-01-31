@@ -28,7 +28,7 @@ address			10 * 2 - 5 / 3 + 12
 102	04 000 001	(r1 * r2 saved in  address 001)
 103	06 000 005	(load 5 goes to register1 at address 000)
 104	03 001 000	(r2 - r1 and 15 is saved in address 000)
-105	06 000 003	(load 3 into address 001)
+105	06 001 003	(load 3 into address 001)
 106	05 000 001	(r1 / r2 and 5 is saved into address 001)
 107 	06 000 012	(load 12 into address 000)
 108 	02 000 001	(r1 + r2 and saved into address 001)
