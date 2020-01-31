@@ -21,49 +21,74 @@ import java.util.Scanner;
 
 public class Main {
 
-    // Global variables
-    
-    
     
     public static void main(String[] args) {
         Scanner x;
         // READ FILE
-        File rf = new File("opcode.txt");
+        File file = new File("opcode.txt");
         
         // File try catch
         try{
-            if(rf.isFile()){
-                System.out.println("rf is file");
-            }
-            x = new Scanner(rf);
+            
+            x = new Scanner(file);
             
             while(x.hasNext()){
-                String opcode = x.next();
-                String r1 = x.next();
-                String r2 = x.next();
-
-                System.out.printf("%s %s %s\n",opcode,r1,r2);
-            
+                // OPCODE
+                String op = x.next();
+                char sign = ' ';
+                
+                // REGISTER 1
+                String r1String = x.next();
+                int rA = Integer.parseInt(r1String);
+                
+                // REGISTER 2
+                String r2String = x.next();
+                int rB = Integer.parseInt(r2String);
+                
+                int temp = 0;
+                
+                // OPCODE
+                switch(op){
+                    case "02":
+                        sign = '+';
+                        break;
+                    case "03":
+                        sign = '-';
+                        break;
+                    case "04":
+                        sign = '*';
+                        break;
+                    case "05":
+                        sign = '/';
+                        break;
+                    default:
+                        System.out.println("sign error");
+                }       
+                
+                switch(op){
+                    case "06":
+                        rB = arithmetic(sign,rA,rB);
+                        break;
+                    case "07":
+                        break;
+                    case "08":
+                        break;
+                    case "09":
+                        break;
+                    case "10":
+                        break;
+                }
             }
             
         }
         catch(Exception e){
-            System.out.println("error in reading");
+            System.out.println("error in reading" + e);
         }
-        
-//        if(rf.exists()){
-//            in = new Scanner(rf);
-//        }
-//        else{
-//            
-//        }
-        
-        
-        // PARSE STRING
-        
-        
-        // 
         
     }
    
+    public int arithmetic(sign,rA,rB){
+        
+        return rB;
+    }
 }
