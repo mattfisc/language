@@ -22,22 +22,34 @@ import java.util.Scanner;
 public class Main {
 
     // Global variables
-    Scanner x;
+    
     
     
     public static void main(String[] args) {
-        
+        Scanner x;
         // READ FILE
         File rf = new File("opcode.txt");
         
         // File try catch
-        if(rf.exists()){
-            System.out.println("file exits");
+        try{
+            if(rf.isFile()){
+                System.out.println("rf is file");
+            }
+            x = new Scanner(rf);
+            
+            while(x.hasNext()){
+                String opcode = x.next();
+                String r1 = x.next();
+                String r2 = x.next();
+
+                System.out.printf("%s %s %s\n",opcode,r1,r2);
+            
+            }
+            
         }
-        else{
-            System.out.println("not exist file");
+        catch(Exception e){
+            System.out.println("error in reading");
         }
-        
         
 //        if(rf.exists()){
 //            in = new Scanner(rf);
@@ -53,17 +65,5 @@ public class Main {
         // 
         
     }
-    public void readFile(){
-        
-        while(x.hasNext()){
-            String opcode = x.next();
-            String r1 = x.next();
-            String r2 = x.next();
-            
-            
-            System.out.printf("%s %s %s\n",opcode,r1,r2);
-            
-        }
-    }
-    
+   
 }
