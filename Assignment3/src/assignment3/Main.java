@@ -16,7 +16,7 @@ public class Main {
         Scanner x;
         
         // READ FILE
-        File file = new File("opcode.txt");
+        File file = new File("opcode1.txt");
         
         // REGISTER 1
         String register1 = "";
