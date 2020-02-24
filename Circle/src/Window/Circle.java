@@ -4,6 +4,8 @@
  */
 package Window;
 
+import java.awt.Graphics;
+
 /**
  *
  * @author Matthew Fischer
@@ -18,5 +20,7 @@ public class Circle {
     public Circle(int x, int y){
         this.x = x;
         this.y = y;
+        
     }
+    
 }

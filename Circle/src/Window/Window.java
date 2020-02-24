@@ -29,8 +29,18 @@ public class Window extends JFrame{
         
         
     }
+    
+    public void paint(Graphics g){
+        g.setColor(Color.red);
+        g.drawOval(100,100,10,10);
+        g.setColor(Color.blue);
+        g.fillOval(400, 400, 50, 50);
+
+    }
+    
     public static void main(String[] args) {
-        Window c = new Window();
+        Window w = new Window();
+        w.paint(null);
     }
     
 }
