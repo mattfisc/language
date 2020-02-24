@@ -2,7 +2,7 @@
  * By:     Matthew Fischer
  * Date:   
  */
-package Window;
+package nibbles;
 
 import java.awt.Graphics;
 
