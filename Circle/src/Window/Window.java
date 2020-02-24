@@ -2,7 +2,7 @@
  * By:     Matthew Fischer
  * Date:   
  */
-package circle;
+package Window;
 
 import javax.swing.JFrame;
 import java.awt.event.*;
@@ -12,17 +12,13 @@ import javax.swing.*;
  *
  * @author Matthew Fischer
  */
-public class Circle extends JFrame{
+public class Window extends JFrame{
 
     Container content = this.getContentPane();
     
     JPanel panel = new JPanel();
     
-    int x;
-    int y;
-    
-    
-    public Circle(){
+    public Window(){
         this.setVisible(true);
         this.setSize(500, 500);
         this.setTitle("Circle");
@@ -34,7 +30,7 @@ public class Circle extends JFrame{
         
     }
     public static void main(String[] args) {
-        Circle c = new Circle();
+        Window c = new Window();
     }
     
 }
