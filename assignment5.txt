@@ -1,0 +1,94 @@
+Matthew Fischer
+CS Programing languages
+Assignemnt 5
+
+Chapter 3
+
+3.1
+
+a)  (define power (lambda (a b)
+                (if (= b 0) 1
+                    * a (power a (- b 1))))))
+					
+b)  (define tail-power (lambda (a b temp)
+                (if (= b 0) temp
+                    (tail-power a (- b 1) (* a temp)))))
+					
+					
+3.2
+	int readMax(){
+	   int max, x;
+	   scanf("%d",&x);
+	   if (x != 0){
+		  max = x;
+		  while (x != 0){
+		  scanf("%d",&x);
+		  if (x > max) max = x;
+		  }
+	   return max;
+	   }
+	}
+	
+3.7
+
+int readMax(){
+   int max, x;
+   scanf("%d",&x);
+   if (x != 0){
+      max = x;
+      while (x != 0){
+      scanf("%d",&x);
+      if (x > max) max = x;
+      }
+   return max;
+   }
+}
+
+Chapter 4
+
+4.2
+
+p || False || false -> p
+T || F || T
+F || F || T
+
+4.3
+
+False || a || a->false || !a
+F || T || F || F
+F || F || T || T
+
+4.4
+
+precipitation -> raining or snowing.
+snowing -> freezing and precipitation.
+raining -> not freezing and precipitation.
+snowing.
+
+4.5
+
+:- dynamic precipitation/0, raining/0, snowing/0, freezing/0.
+
+precipitation :- raining.
+precipitation :- snowing.
+snowing :- freezing, precipitation.
+raining :- \+ freezing, precipitation.
+snowing.
+
+returns:
+“Is it freezing?” – freezing. yes
+“Is it raining?” – raining. out of stack
+
+
+:- dynamic precipitation/0, raining/0, snowing/0, freezing/0.
+
+precipitation :- snowing.
+precipitation :- raining.
+snowing :- freezing, precipitation.
+snowing.
+raining :- \+ freezing, precipitation.
+freezing :- snowing.
+
+returns:
+freezing. yes.
+raining. no.
