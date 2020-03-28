@@ -17,11 +17,12 @@ import java.awt.geom.Ellipse2D;
 public class Window extends JPanel  {
 
     Circle c;
-    
+
     JButton addBall = new JButton("Add Ball");
     
     public Window(){
         c = new Circle();
+        
         this.add(addBall, BorderLayout.NORTH);
         this.setBackground(Color.black);
         
@@ -73,6 +74,7 @@ public class Window extends JPanel  {
         frame.setSize(500, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
+
         while(true){
             app.move();
             app.repaint();
