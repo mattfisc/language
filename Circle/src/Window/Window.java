@@ -14,19 +14,24 @@ import java.awt.geom.Ellipse2D;
  *
  * @author Matthew Fischer
  */
-public class Window extends JPanel  {
-
-    Circle c;
+public class Window extends JPanel implements ActionListener {
+    int index = 0;
+    Circle[] c;
 
     JButton addBall = new JButton("Add Ball");
     
     public Window(){
-        c = new Circle();
+        
+        c = new Circle[10];
         
         this.add(addBall, BorderLayout.NORTH);
+        addBall.addActionListener(this);
         this.setBackground(Color.black);
         
     }
+    
+    
+    
     public void move(){
         if(c.x + c.xVel < 0){
             c.xVel = 1;
@@ -81,6 +86,11 @@ public class Window extends JPanel  {
             Thread.sleep(10);
             
         }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        e.getSource() = new Circle();
     }
 
     
