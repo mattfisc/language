@@ -1,0 +1,88 @@
+Matthew Fischer
+Computer Programming
+Assignment 6
+Sorry for the late assignment.  I did not see that it was due at 2 am.  I thought it was due at midnight tonight.
+
+Exercise 6.5
+
+a)
+The strings that are represent by the regular expression are [0-9] which are items.
+(+) which say that it can be repeated one or more times. The first set of () means 
+that what is in side are optional. Optional ‘E’ or ‘e’The Optional ‘+’ or ‘-‘And 
+then again [0-9] that can be repeated more than onceAnd the product of this 
+expressionis a number that is or is not in scientific notation. 
+
+b)
+[a-z|A-Z|_]+([a-z|A-Z|0-9|_]+)?Whenpluggedintoregex pal you find the 
+product to be.Abcd___ABCD1abcd1______abcd_AB_CD_Fabc_def2A_b_C_D1_2_3abAB
+
+Exercise 6.13
+a)
+
+→ –expr | termexpr → expr + term | termterm → term * factor 
+| factorfactor → ( expr ) | number number → number digit | 
+digitdigit → 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8| 
+
+→ –expr | termexpr → term { + term }term → factor { * factor }factor 
+→ ( expr ) | numbernumber → digit { digit }digit → 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8| 9
+
+b)
+
+BNFexpr → expr + term | termunaryminsus → expr + term | termterm → term * factor | factor
+unaryminsus → term * factor | factorfactor → ( expr ) | numbernumber → number digit | 
+digitdigit → 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8| 9EBNFexpr → term { + term }term → factor 
+{ * factor }factor → ( expr ) | numberunaryminsus → ( -expr ) | numbernumber → digit 
+{ digit}digit → 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8| 
+
+Exercise 6.15
+
+void sentence() 
+{
+	nounPhrase();
+	verbPhrase();
+}
+	void nonPhrase() {article();
+	noun();
+}
+void verbPhrase() 
+	{verb();
+	article();
+	noun();
+	}
+void article()
+{
+	if (token == “a”) 
+		match (“a”, “a expected”);
+	else if (token == “the”) 
+		match (“the”, “the expected”);
+	else 
+		error (“article expected”);
+}
+void noun() 
+{
+if (token == “girl”) 
+	match (“girl”, “girl expected”);
+	else if (token == “dog”) 
+		match (“dog”, “dog expected”);
+	else 
+		error (“noun expected”);
+}
+void verb() 
+{
+	if (token == “sees”) 
+		match (“sees”, “sees expected”);
+	else if (token == “pets”) 
+		match (“pets, “pets expected”);
+		else error (“verb expected”);
+}
+
+
+Exercise 6.49
+
+a)
+Predictive parsers-require that the grammar 
+to be parsed satisfies certain conditions 
+so that this decision making process will work.
+The first condition is the ability to choose among 
+several alternatives in a grammar rule.
+This is shown in the first line with thye choice of(list)or‘a’
