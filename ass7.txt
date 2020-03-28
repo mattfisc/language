@@ -1,0 +1,40 @@
+Matthew Fischer
+Assignement 7
+3/28/2020
+Chapter 
+
+
+  Exercise 7.1
+
+
+(a) This occurs during run-time for it depends on the number.
+(b) The meaning of char is part of static binding and occurs during language definition time.
+(c) In C  and Java one can have dynamic or static arrays so the size of an array variable can be declared during compile or run-time.
+(d) In C  and java the size of an array parameter is determined upon compile time.
+(e) Variables in C are static.
+    Variables in Java are objects so they can be changed at Run Time.
+(f) A constant is statically bound at load time for this preset and the value doesn't change.
+(g) In C functions are by default declared statically although if the function is declared 
+    virtual it will become dynamic and execute at run-time.  In Java functions are also 
+	static or dynamic so they are determined during run-time or compile.
+	
+  Exercise 7.2
+
+ Early binding means the compiler is able to jump straight to the address of the function being called.  
+ Late binding is less efficient because there is an extra step. Late binding is more flexible does not
+ have to be identified at the compilation.
+ 
+  Exercise 7.4
+ 
+C++ is an extention of the C language.  C++ supports object oriented programming.  C does not support
+classes and objects.  It focuses on methods.  C++ supports and is built around classes and objects.
+C is focused on primitive data types where C++ also supports user-identified data types.
+
+  Exercise 7.10
+  
+Dynamic scoping has an ability to statically check for references to nonlocal variables.    
+Dynamics scoping also makes the program difficult to read because calling sequence needs to be known.
+There is no way to protect local variables reguardless of the proximity.
+Accessing non local variables takes longer.
+
+  
