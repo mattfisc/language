@@ -15,9 +15,9 @@ import java.util.ArrayList;
  *
  * @author Matthew Fischer
  */
-public class Window extends JPanel {
+public class Window extends JPanel implements ActionListener{
     
-    ArrayList<Circle> c = new ArrayList();
+    ArrayList<Circle> balls = new ArrayList();
 
     JButton addBall = new JButton("Add Ball");
     
@@ -29,6 +29,7 @@ public class Window extends JPanel {
         
         // COLOR BACKGROUND
         this.setBackground(Color.black);
+        
         
     }
     
@@ -46,7 +47,7 @@ public class Window extends JPanel {
     public void paint(Graphics g){
         super.paint(g);
         
-        for(Circle: c){
+        for(Circle c : balls){
             g.setColor(c.color);
             g.fillOval(c.x,c.y,c.diameter,c.diameter);
         }
@@ -57,19 +58,27 @@ public class Window extends JPanel {
     public static void main(String[] args) throws InterruptedException {
         Window app = new Window();
         JFrame frame = new JFrame("Moving Ball");
-        frame.add(app);
         
+        frame.add(app);
         frame.setVisible(true);
         frame.setSize(500, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
 
         while(true){
-            app.move();
+            // MOVE BALLS
+            for(Circle c : balls){
+                c.move();
+            }
             app.repaint();
             Thread.sleep(10);
             
         }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
    
