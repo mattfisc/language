@@ -38,4 +38,25 @@ public class Circle {
         
     }
     
+    
+    public void move(){
+        if(this.x + this.xVel < 0){
+            this.xVel = 1;
+        }
+        else if(this.x + this.xVel > 500){
+            this.xVel = -1;
+        }
+        else if(this.y + this.yVel < 0){
+            this.yVel = 1;
+        }
+        else if(this.y + this.yVel >  500){
+            this.yVel = -1;
+        }
+        
+        this.x = this.x + this.xVel;
+        this.y = this.y + this.yVel;
+        
+        
+    }
+    
 }
