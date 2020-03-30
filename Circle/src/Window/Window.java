@@ -67,8 +67,8 @@ public class Window extends JPanel implements ActionListener{
 
         while(true){
             // MOVE BALLS
-            for(Circle c : balls){
-                c.move();
+            for(int i = 0; i < balls.size(); i++){
+                
             }
             app.repaint();
             Thread.sleep(10);
