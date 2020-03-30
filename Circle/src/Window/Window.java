@@ -78,7 +78,10 @@ public class Window extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // NEW CIRCLE
+        Circle c = new Circle();
+        // ADD CIRCLE
+        balls.add(c);
     }
 
    
