@@ -16,13 +16,13 @@ import java.awt.geom.Ellipse2D;
  */
 public class Window extends JPanel implements ActionListener {
     int index = 0;
-    Circle[] c;
+    Circle c;
 
     JButton addBall = new JButton("Add Ball");
     
     public Window(){
         
-        c = new Circle[10];
+        c = new Circle;
         
         this.add(addBall, BorderLayout.NORTH);
         addBall.addActionListener(this);
@@ -88,10 +88,6 @@ public class Window extends JPanel implements ActionListener {
         }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        e.getSource() = new Circle();
-    }
-
+   
     
 }
