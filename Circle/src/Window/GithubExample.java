@@ -12,7 +12,7 @@ public class GithubExample {
     
 }
 // PROGRAM EXAMPLE
-
+/*
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -37,21 +37,22 @@ class Program {
 
         balls = new ArrayList<>();
 
-        /* Generate balls */
+        Generate balls
         for (int i = 0; i < 50; i++) {
-            Ball ball = new Ball(
-                    /* Random positions from 0 to windowWidth or windowHeight */
+            Ball ball = new Ball(*/
+                    
+                    /* Random positions from 0 to windowWidth or windowHeight 
                     (int) Math.floor(Math.random() * windowWidth),
                     (int) Math.floor(Math.random() * windowHeight),
-                    /* Random size from 10 to 30 */
+                    /* Random size from 10 to 30 
                     (int) Math.floor(Math.random() * 20) + 10,
-                    /* Random RGB colors*/
+                    /* Random RGB colors
                     new Color(
                             (int) Math.floor((Math.random() * 256)),
                             (int) Math.floor((Math.random() * 256)),
                             (int) Math.floor((Math.random() * 256))
                     ),
-                    /* Random velocities from -5 to 5 */
+                    /* Random velocities from -5 to 5 
                     (int) Math.floor((Math.random() * 10) - 5),
                     (int) Math.floor((Math.random() * 10) - 5)
             );
@@ -59,7 +60,7 @@ class Program {
             balls.add(ball);
         }
 
-        /* Initialize program */
+        /* Initialize program 
         mainFrame = new JFrame();
         drawPanel = new DrawPanel();
         mainFrame.getContentPane().add(drawPanel);
@@ -71,9 +72,9 @@ class Program {
         while (true) {
             for (Ball b: balls) {
                 b.update();
-            }
+            }*/
 
-            /* Give Swing 10 milliseconds to see the update! */
+            /* Give Swing 10 milliseconds to see the update! 
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
@@ -148,4 +149,4 @@ class Program {
             g.fillOval(posX, posY, size, size);
         }
     }
-}
+}*/

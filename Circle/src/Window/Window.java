@@ -30,7 +30,10 @@ public class Window extends JPanel implements ActionListener{
         // COLOR BACKGROUND
         this.setBackground(Color.black);
         
-        
+        // MOVE BALLS
+        for(Circle c : balls){
+            c.move();
+        }
     }
     
     
@@ -66,10 +69,7 @@ public class Window extends JPanel implements ActionListener{
         
 
         while(true){
-            // MOVE BALLS
-            for(int i = 0; i < balls.size(); i++){
-                
-            }
+            
             app.repaint();
             Thread.sleep(10);
             
