@@ -15,40 +15,49 @@ import java.util.ArrayList;
  *
  * @author Matthew Fischer
  */
-public class Window extends JPanel implements ActionListener{
+public class Window extends JFrame implements ActionListener{
     
     ArrayList<Circle> balls = new ArrayList();
 
     JButton addBall = new JButton("Add Ball");
+    JFrame frame;
+    JPanel drawPanel;
     
     public Window(){
         
+        frame = new JFrame("Moving Ball");
         
+        drawPanel = new JPanel();
+        frame.add(drawPanel);
+        frame.setVisible(true);
+        frame.setSize(500, 500);
         // ADD BUTTON
-        this.add(addBall, BorderLayout.NORTH);
+        frame.add(addBall, BorderLayout.NORTH);
         
         // COLOR BACKGROUND
-        this.setBackground(Color.black);
+        frame.setBackground(Color.black);
+        
+        addBall.addActionListener(this);
         
         // MOVE BALLS
         for(Circle c : balls){
+            
             c.move();
         }
     }
-    
-    
-    
-    
-   
-//    public void paintComponent(Graphics g){
-//        paintComponent(g);
-//        Graphics2D g2 = (Graphics2D) g;
-//        g2.fill(new Ellipse2D.Double(c.x,c.y,40,40) );
-//    }
+
+    public void paintComponent(Graphics graphics) {
+        paintComponent(graphics);
+
+        for (Circle b: balls) {
+            paint(graphics);
+        }
+
+    }
     
     
     public void paint(Graphics g){
-        super.paint(g);
+        paint(g);
         
         for(Circle c : balls){
             g.setColor(c.color);
@@ -58,21 +67,26 @@ public class Window extends JPanel implements ActionListener{
 
     }
     
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         Window app = new Window();
-        JFrame frame = new JFrame("Moving Ball");
+     
+        app.run();
+    }
+    
+    public void run(){
         
-        frame.add(app);
-        frame.setVisible(true);
-        frame.setSize(500, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-
         while(true){
             
-            app.repaint();
-            Thread.sleep(10);
+            try{
+                
+                Thread.sleep(10);
             
+            } catch (InterruptedException e){
+                e.printStackTrace();
+            }
+            frame.repaint();
         }
     }
 
