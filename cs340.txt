@@ -1,0 +1,46 @@
+"int x = 123;" okay
+"in x = 123;" not okay
+------------------------------------------------------------------------
+
+<arithmetic> : '+'|'-'|'*'|'/'|'^'
+<relational-expression> : '>'|'<'|'>='|'<='|'=='
+
+
+<type> : 'int'|'double'
+<digit> : '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'
+
+<underline> : '_'
+
+<alpha> : 'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|
+'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z'|
+'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|
+'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z'|
+
+<first-char> : <alpha>|<underline>
+<other-char> : <alpha>|<underline>|<digit>
+<other-chars> : <other-char>[<other-chars>]
+<variable>:<first-char>[<other-chars>]
+
+<line-terminator> : ';'
+<if> : 'if'
+<else> : 'else'
+
+
+<type-declaration-statement> : <type><variable>
+
+<expression> : <variable>|<digit><arithmetic><variable>|<digit>
+
+<assignment-token> : '='
+
+<type-declaration-statement> : [<type><variable>]<variable><assignment-token><digit>|<variable>
+<assignment-statement> : <type-declaration-statement>|<variable><assignment-token><variable><digit>
+
+
+
+<if-statement> : <if> '(' <relational-expression> ')' <statement>| [<else> <statement>] 
+
+
+<statement> : [<type-declaration-statement>|<assignment-statement>|<if-statement>]<line-terminator>
+<statements> : <statement>[<statements>]
+<program> : <statement>[<statements>]
+
