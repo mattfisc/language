@@ -3,7 +3,7 @@
 ------------------------------------------------------------------------
 
 <arithmetic> : '+'|'-'|'*'|'/'|'^'
-<relational-expression> : '>'|'<'|'>='|'<='|'=='
+<relational> : '>'|'<'|'>='|'<='|'=='
 
 
 <type> : 'int'|'double'
@@ -26,16 +26,14 @@
 <else> : 'else'
 
 
-<type-declaration-statement> : <type><variable>
+<type-declaration> : <type><variable>
 
 <expression> : <variable>|<digit><arithmetic><variable>|<digit>
-
+<relational-expression> : <variable>|<digit><relational><variable>|<digit>
 <assignment-token> : '='
 
 <type-declaration-statement> : [<type><variable>]<variable><assignment-token><digit>|<variable>
 <assignment-statement> : <type-declaration-statement>|<variable><assignment-token><variable><digit>
-
-
 
 <if-statement> : <if> '(' <relational-expression> ')' <statement>| [<else> <statement>] 
 
