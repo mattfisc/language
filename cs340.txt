@@ -3,7 +3,7 @@
 ------------------------------------------------------------------------
 
 <arithmetic-operator> : '+'|'-'|'*'|'/'|'^'
-<relational-operator> : '>'|'<'|'>='|'<='|'=='
+<relational-operator> : '>'|'<'|'>='|'<='|'=='|'!='|'&&'|'||'
 
 
 <type> : 'int'|'double'
@@ -28,15 +28,12 @@
 
 
 <type-declaration> : <type><variable>
-
-
-
-
 <term> : <number>|<variable>		
-<arithmetic-expression> : <arithmetic-operator><term>[<factor>] 
-<factor> : <term>[<arithmetic-expression>]
 
-<relational-expression> : <relational-operator><term>
+<arithmetic-expression> : <term><arithmetic-operator><term>[<arithmetic-operator>] 
+
+
+<relational-expression> : <term><relational-operator><term>[<relational-expression>]
 <assignment-token> : '='
 
 <type-declaration-statement> : <type-declaration>|<variable><assignment-token><factor>
