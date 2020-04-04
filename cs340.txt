@@ -1,4 +1,19 @@
 
+Usage	Notation
+definition	=
+concatenation	,
+termination	;
+alternation	|
+optional	[ ... ]
+repetition	{ ... }
+grouping	( ... )
+terminal string	" ... "
+terminal string	' ... '
+comment	(* ... *)
+special sequence	? ... ?
+exception	-
+
+
 <arithmetic-operator> : '+'|'-'|'*'|'/'|'**'
 <relational-operator> : '>'|'<'|'>='|'<='|'=='|'!='
 <logical-operator> : '&&' | '||'
@@ -7,35 +22,49 @@
 <digit> : '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'
 <number> : <digit>[<number>]
 
-<underline> : '_'
 
-<alpha> : 'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|
+
+<letter> : 'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|
 'm'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z'|
 'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|
-'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z'|
+'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z'
 
-<first-char> : <alpha>|<underline>
-<other-char> : <alpha>|<underline>|<number>
+<symbol> : "[" | "]" | "{" | "}" | "(" | ")" | "<" | ">"
+    | "'" | '"' | "=" | "|" | "." | "," | ";" ;
+
+<underline> : '_'
+
+<first-char> : <letter>|<underline>
+<other-char> : <letter>|<symbol>|<underline>|<number>
 <other-chars> : <other-char>[<other-chars>]
 <variable>:<first-char>[<other-chars>]
+<white_space> : ' '| '\n'
+
 
 <line-terminator> : ';'
 <if> : 'if'
 <else> : 'else'
 <assignment-token> : '='
 
-<type-declaration> : <type><variable>
+<type-declaration> : <type>,<variable>
 <term> : <number>|<variable>		
 
-<arithmetic-expression> : (<type-declaration>|<term>)<arithmetic-operator><term>[<arithmetic-operator><term>] 
-<relational-expression> : <term><relational-operator>['!'<variable>]|<term>[<logical-operator><relational-expression>]
+<arithmetic-expression> : <type-declaration>|<term>,<arithmetic-operator>,<term>[<arithmetic-operator>,<term>] 
+<relational-expression> : <term>,<relational-operator>['!',<variable>]|<term>[<logical-operator><relational-expression>]
 
 <type-declaration-statement> : <type-declaration>|<variable>[<assignment-token><term>]
 <assignment-statement> : <variable><assignment-token><term>
 
-<if-statement> : <if> '(' <relational-expression> ')' <statement>| [<else> <statement>] 
+<if-statement> : <if>,'(',<relational-expression>,')','{'<block>'}',[<else> '{'<block>'}'] 
 
 <statement> : (<type-declaration-statement>|<assignment-statement><line-terminator>)|<if-statement>
+
 <block> : <statement>[<block>]
-<program> : <block>[<block>]
+
+<program> : 'PROGRAM', white_space, <variable>, white_space, 
+            'BEGIN', white_space, 
+            <block>[<block>],white_space, 
+            'END'
+
+
 
