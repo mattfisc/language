@@ -1,10 +1,7 @@
-"int x = 123;" okay
-"in x = 123;" not okay
-------------------------------------------------------------------------
 
-<arithmetic-operator> : '+'|'-'|'*'|'/'|'^'
-<relational-operator> : '>'|'<'|'>='|'<='|'=='|'!='|'&&'|'||'
-
+<arithmetic-operator> : '+'|'-'|'*'|'/'|'**'
+<relational-operator> : '>'|'<'|'>='|'<='|'=='|'!='
+<logical-operator> : '&&' | '||'
 
 <type> : 'int'|'double'
 <digit> : '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'
@@ -25,38 +22,20 @@
 <line-terminator> : ';'
 <if> : 'if'
 <else> : 'else'
-
+<assignment-token> : '='
 
 <type-declaration> : <type><variable>
 <term> : <number>|<variable>		
 
-<arithmetic-expression> : <term><arithmetic-operator><term>[<arithmetic-operator>] 
+<arithmetic-expression> : (<type-declaration>|<term>)<arithmetic-operator><term>[<arithmetic-operator><term>] 
+<relational-expression> : <term><relational-operator>['!'<variable>]|<term>[<logical-operator><relational-expression>]
 
-
-<relational-expression> : <term><relational-operator><term>[<relational-expression>]
-<assignment-token> : '='
-
-<type-declaration-statement> : <type-declaration>|<variable><assignment-token><factor>
-<assignment-statement> : <type-declaration-statement>|<variable><assignment-token><variable><digit>
+<type-declaration-statement> : <type-declaration>|<variable>[<assignment-token><term>]
+<assignment-statement> : <variable><assignment-token><term>
 
 <if-statement> : <if> '(' <relational-expression> ')' <statement>| [<else> <statement>] 
 
-
-<statement> : [<type-declaration-statement>|<assignment-statement>|<if-statement>]<line-terminator>
-<statements> : <statement>[<statements>]
-<program> : <statement>[<statements>]
-
-
-expression 
-
-
-
-<expression> : <term>
-        |  <expression> '+' <term>
-        |  <expression> '-' <term>
-<term> : <factor>
-        |  <term> '*' <factor>
-        |  <term> '/' <factor>
-<factor> : <number>
-        |  '(' <expression> ')'
+<statement> : (<type-declaration-statement>|<assignment-statement><line-terminator>)|<if-statement>
+<block> : <statement>[<block>]
+<program> : <block>[<block>]
 
