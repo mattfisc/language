@@ -2,12 +2,13 @@
 "in x = 123;" not okay
 ------------------------------------------------------------------------
 
-<arithmetic> : '+'|'-'|'*'|'/'|'^'
-<relational> : '>'|'<'|'>='|'<='|'=='
+<arithmetic-operator> : '+'|'-'|'*'|'/'|'^'
+<relational-operator> : '>'|'<'|'>='|'<='|'=='
 
 
 <type> : 'int'|'double'
 <digit> : '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'
+<number> : <digit>[<number>]
 
 <underline> : '_'
 
@@ -17,7 +18,7 @@
 'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z'|
 
 <first-char> : <alpha>|<underline>
-<other-char> : <alpha>|<underline>|<digit>
+<other-char> : <alpha>|<underline>|<number>
 <other-chars> : <other-char>[<other-chars>]
 <variable>:<first-char>[<other-chars>]
 
@@ -28,11 +29,17 @@
 
 <type-declaration> : <type><variable>
 
-<expression> : <variable>|<digit><arithmetic><variable>|<digit>
-<relational-expression> : <variable>|<digit><relational><variable>|<digit>
+
+
+
+<term> : <number>|<variable>		
+<arithmetic-expression> : <arithmetic-operator><term>[<factor>] 
+<factor> : <term>[<arithmetic-expression>]
+
+<relational-expression> : <relational-operator><term>
 <assignment-token> : '='
 
-<type-declaration-statement> : [<type><variable>]<variable><assignment-token><digit>|<variable>
+<type-declaration-statement> : <type-declaration>|<variable><assignment-token><factor>
 <assignment-statement> : <type-declaration-statement>|<variable><assignment-token><variable><digit>
 
 <if-statement> : <if> '(' <relational-expression> ')' <statement>| [<else> <statement>] 
@@ -41,4 +48,18 @@
 <statement> : [<type-declaration-statement>|<assignment-statement>|<if-statement>]<line-terminator>
 <statements> : <statement>[<statements>]
 <program> : <statement>[<statements>]
+
+
+expression 
+
+
+
+<expression> : <term>
+        |  <expression> '+' <term>
+        |  <expression> '-' <term>
+<term> : <factor>
+        |  <term> '*' <factor>
+        |  <term> '/' <factor>
+<factor> : <number>
+        |  '(' <expression> ')'
 
