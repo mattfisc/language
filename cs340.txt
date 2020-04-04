@@ -22,7 +22,7 @@ exception	-
 <type> : 'int'|'double'
 <digit> : '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'
 <number> : ['-']<digit>[<number>]
-
+string = '"' , { all_characters - '"' }, '"' ;
 
 
 <letter> : 'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|
@@ -36,9 +36,9 @@ exception	-
 <underline> : '_'
 
 <first-char> : <letter>|<underline>
-<other-char> : <letter>|<symbol>|<underline>|<number>
-<other-chars> : <other-char>[<other-chars>]
-<variable>:<first-char>[<other-chars>]
+<all_characters> : <letter>|<symbol>|<underline>|<number>
+
+<variable>:<first-char>{<all_characters>}......................................
 <white_space> : ' '| '\n'
 
 
