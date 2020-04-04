@@ -1,5 +1,6 @@
 
 Usage	Notation
+----------------
 definition	=
 concatenation	,
 termination	;
@@ -12,7 +13,7 @@ terminal string	' ... '
 comment	(* ... *)
 special sequence	? ... ?
 exception	-
-
+----------------------------------------------------
 
 <arithmetic-operator> : '+'|'-'|'*'|'/'|'**'
 <relational-operator> : '>'|'<'|'>='|'<='|'=='|'!='
@@ -20,7 +21,7 @@ exception	-
 
 <type> : 'int'|'double'
 <digit> : '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'
-<number> : <digit>[<number>]
+<number> : ['-']<digit>[<number>]
 
 
 
@@ -61,10 +62,22 @@ exception	-
 
 <block> : <statement>[<block>]
 
-<program> : 'PROGRAM', white_space, <variable>, white_space, 
-            'BEGIN', white_space, 
-            <block>[<block>],white_space, 
+<program> : 'PROGRAM', <white_space>, <variable>, <white_space>, 
+            'BEGIN', <white_space>, 
+            <block>[<block>],<white_space>, 
             'END'
 
 
+------------------------- do i need to do something like this
+<left> = <variable> ;
+<right> = <identifier>
+     | <terminal>
+     | "[" , <rhs> , "]"
+     | "{" , <rhs> , "}"
+     | "(" , <rhs> , ")"
+     | <rhs> , "|" , <rhs>
+     | <rhs> , "," , <rhs> ;
+
+<rule> = <lhs> , "=" , <rhs> , ";" ;
+<grammar> = '{', <rule>, '}', ';'
 
