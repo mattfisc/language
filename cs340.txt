@@ -1,73 +1,87 @@
 
-Usage	Notation
-----------------
-definition	=
-concatenation	,
-termination	;
-alternation	|
-optional	[ ... ]
-repetition	{ ... }
-grouping	( ... )
-terminal string	" ... "
-terminal string	' ... '
-comment	(* ... *)
-special sequence	? ... ?
-exception	-
+Grammar Table
+
+ :   means "is defined as"   
+" "  enclose literal items    
+[ ]  enclose items which may be omitted
+{ }  enclose items which may appear zero or more times    
+ |   indicates a choice   
+( )  are used for grouping required choices    
+< >  enclose semantic qualifications
+
 ----------------------------------------------------
 
-<arithmetic-operator> : '+'|'-'|'*'|'/'|'**'
-<relational-operator> : '>'|'<'|'>='|'<='|'=='|'!='
-<logical-operator> : '&&' | '||'
+<arithmetic-operator> 	: '+' | '-' | '*' | '/'
+<relational-operator> 	: '>' | '<' | '>=' | '<=' | '==' | '!='
+<logical-operator> 		: '&&' | '||'
 
-<type> : 'int'|'double'
-<digit> : '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'
-<number> : ['-']<digit>[<number>]
-string = '"' , { all_characters - '"' }, '"' ;
+<type> : 'int' | 'double'
+<digit> : '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
+<integer> : ['-']<digit>{<digit>}
+<double>  : ['-']<digit>{<digit>} '.' {<digit>}
+<number> : <integer> | <double>
+
+<string> : '"' , { <all_characters> - '"' }, '"' ;
 
 
-<letter> : 'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|
-'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z'|
-'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|
-'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z'
+<letter> :  'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' 
+	| 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' 
+	| 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z' | 'A' | 'B' | 'C' 
+	| 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' 
+	| 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' 
+	| 'X' | 'Y' | 'Z'
 
-<symbol> : "[" | "]" | "{" | "}" | "(" | ")" | "<" | ">"
-    | "'" | '"' | "=" | "|" | "." | "," | ";" ;
+<symbol> : 	'[' | ']' | '{' | '}' | '(' | ')' | '<' | '>' | ''' 
+	| '"' | '=' | '|' | '.' | ',' | ';'
 
 <underline> : '_'
 
-<first-char> : <letter>|<underline>
-<all_characters> : <letter>|<symbol>|<underline>|<number>
+<first-char> : <letter> | <underline>
+<other-char> : <letter> | <underline> | <digit>
 
-<variable>:<first-char>{<all_characters>}......................................
-<white_space> : ' '| '\n'
+<all_characters> : <letter> | <symbol> | <underline> | <number>[<all_characters>]
 
+<variable> : <first-char>{<other-char>}
+
+<white_space> : ' ' | '\n'
 
 <line-terminator> : ';'
 <if> : 'if'
 <else> : 'else'
 <assignment-token> : '='
 
-<type-declaration> : <type>,<variable>
-<term> : <number>|<variable>		
+<type-declaration> : <type><variable>
+<type-declaration-initialized> : <type-declaration><assignment-token><expression>
+<type-declaration-statement> : <type-declaration> | <type-declaration-initialized>
 
-<arithmetic-expression> : <type-declaration>|<term>,<arithmetic-operator>,<term>[<arithmetic-operator>,<term>] 
-<relational-expression> : <term>,<relational-operator>['!',<variable>]|<term>[<logical-operator><relational-expression>]
+<expression> :  '('<expression>')' | <variable> | <number> | <expression><arithmetic-operator><expression>
 
-<type-declaration-statement> : <type-declaration>|<variable>[<assignment-token><term>]
-<assignment-statement> : <variable><assignment-token><term>
+<addsub-term> : <number> ('+'|'-') <number>
+<multidiv-term> : <number> ('*'|'/') <number>
 
-<if-statement> : <if>,'(',<relational-expression>,')','{'<block>'}',[<else> '{'<block>'}'] 
 
-<statement> : (<type-declaration-statement>|<assignment-statement><line-terminator>)|<if-statement>
 
-<block> : <statement>[<block>]
+<relational-expression> : '('<relational-expression>')' | (<variable> | <number>) <relational-operator> (<variable> | <number>)
+{<logical-operator><relational-expression>}
 
-<program> : 'PROGRAM', <white_space>, <variable>, <white_space>, 
-            'BEGIN', <white_space>, 
-            <block>[<block>],<white_space>, 
+
+<assignment-statement> : <variable><assignment-token><expression>
+
+<if-statement> : 'if' '(' <relational-expression> ')' <block> 
+				{'else if' '(' <relational-expression> ')' <block>} 
+				['else' <block>]
+				
+<statement> : <type-declaration-statement><line-terminator>|<if-statement>
+
+<block> : <statement>{<block>}
+
+<program> : 'PROGRAM' <variable>
+            'BEGIN' <block>
             'END'
 
 
+
+---------------------------------------------------------------
 ------------------------- do i need to do something like this
 <left> = <variable> ;
 <right> = <identifier>
