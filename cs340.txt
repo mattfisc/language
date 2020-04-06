@@ -1,14 +1,17 @@
 
 Grammar Table
 
- :   means "is defined as"   
+ :   means "is defined as"
+ ,	 concatenation
+ ;	 termination
 " "  enclose literal items    
 [ ]  enclose items which may be omitted
 { }  enclose items which may appear zero or more times    
  |   indicates a choice   
 ( )  are used for grouping required choices    
 < >  enclose semantic qualifications
-
+(* *)comments
+ -	 exception
 ----------------------------------------------------
 
 <arithmetic-operator> 	: '+' | '-' | '*' | '/'
@@ -20,9 +23,6 @@ Grammar Table
 <integer> : ['-']<digit>{<digit>}
 <double>  : ['-']<digit>{<digit>} '.' {<digit>}
 <number> : <integer> | <double>
-
-<string> : '"' , { <all_characters> - '"' }, '"' ;
-
 
 <letter> :  'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' 
 	| 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' 
@@ -39,33 +39,33 @@ Grammar Table
 <first-char> : <letter> | <underline>
 <other-char> : <letter> | <underline> | <digit>
 
-<all_characters> : <letter> | <symbol> | <underline> | <number>[<all_characters>]
+<character> : <letter> | <symbol> | <underline> | <digit>
+<string> : '"'  { <all-characters> -'"' } '"' ;
 
-<variable> : <first-char>{<other-char>}
 
-<white_space> : ' ' | '\n'
+<identifier> : <first-char>{<other-char>}
 
 <line-terminator> : ';'
 <if> : 'if'
 <else> : 'else'
 <assignment-token> : '='
 
-<type-declaration> : <type><variable>
+<type-declaration> : <type><identifier>
 <type-declaration-initialized> : <type-declaration><assignment-token><expression>
 <type-declaration-statement> : <type-declaration> | <type-declaration-initialized>
 
-<expression> :  '('<expression>')' | <variable> | <number> | <expression><arithmetic-operator><expression>
+<expression> :  '('<expression>')' | <identifier> | <number> | <expression><arithmetic-operator><expression>
 
 <addsub-term> : <number> ('+'|'-') <number>
 <multidiv-term> : <number> ('*'|'/') <number>
 
 
 
-<relational-expression> : '('<relational-expression>')' | (<variable> | <number>) <relational-operator> (<variable> | <number>)
+<relational-expression> : '('<relational-expression>')' | (<identifier> | <number>) <relational-operator> (<variable> | <number>)
 {<logical-operator><relational-expression>}
 
 
-<assignment-statement> : <variable><assignment-token><expression>
+<assignment-statement> : <identifier><assignment-token><expression>
 
 <if-statement> : 'if' '(' <relational-expression> ')' <block> 
 				{'else if' '(' <relational-expression> ')' <block>} 
@@ -75,7 +75,7 @@ Grammar Table
 
 <block> : <statement>{<block>}
 
-<program> : 'PROGRAM' <variable>
+<program> : 'PROGRAM' <identifier>
             'BEGIN' <block>
             'END'
 
@@ -83,7 +83,7 @@ Grammar Table
 
 ---------------------------------------------------------------
 ------------------------- do i need to do something like this
-<left> = <variable> ;
+<left> = <identifier> ;
 <right> = <identifier>
      | <terminal>
      | "[" , <rhs> , "]"
