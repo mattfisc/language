@@ -14,11 +14,11 @@ public class LexicalAnalizer {
     
     boolean program;
     String programName;
-    boolean block;
+
     
     public LexicalAnalizer(){
         program = false;
-        block = false;
+        programName = "";
     }
     
     
@@ -32,12 +32,12 @@ public class LexicalAnalizer {
         try {
             type = st.nextToken();
             identifier = st.nextToken();
-            
             expression = st.nextToken();
-            System.out.println("type: " + type + "\nidentifier: " + identifier 
-                + "\nexpression: " + expression);
+            
+            System.out.println("Type: " + type + "\nIdentifier: " + identifier 
+                + "\nExpression: " + expression);
         } catch (Exception e) {
-            System.out.println("error reading");
+            System.out.println("Error reading");
         }
     }
     
@@ -45,21 +45,24 @@ public class LexicalAnalizer {
     public void searchProgram(String data) {
        
         StringTokenizer st;
-        String check,begin;
+        String check;
         String token = " ";
         st = new StringTokenizer(data, token);
         
         try {
-            while(st.hasMoreTokens()){
-                check = st.nextToken();
 
-                if(check.equals("PROGRAM")){
-                    programName = st.nextToken();
-                    check = st.nextToken();
-                    if(check.equals("BEGIN"))
-                        program = true;
+            check = st.nextToken();
+            System.out.println(check);
 
-                }
+            // START PROGRAM
+            if(check.equals("PROGRAM")){
+                programName = st.nextToken();
+
+            // BEGIN CODE BLOCK
+            if(check.equals("BEGIN"))
+                program = true;
+
+                
             }
                 
             

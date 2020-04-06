@@ -30,22 +30,22 @@ public class TinyJavaApp {
         TinyJavaApp p = new TinyJavaApp();
 
         String[] data = 
-        {"PROGRAM p1 "
-            + "BEGIN "
-            + "int x = 1; "
-            + "int y = 5; "
-            + "x = y; "
-            + "isnt z = 4; "
-            + "END "};
+        {"PROGRAM p1"
+            , "BEGIN"
+            , "int x = 1;"
+            , "int y = 5;"
+            , "x = y;"
+            , "isnt z = 4;"
+            , "END"};
         
         for (String data1 : data) {
             Scanner line = new Scanner(data1);
-       
-            if(!p.analizer.program  == false)
+            System.out.println(p.analizer.program);
+            if(p.analizer.program  == false)
                 p.analizer.searchProgram(line.nextLine());
-            else{
+            else
                 p.analizer.expression(line.nextLine());
-            }
+            
         }
         
 
