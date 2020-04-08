@@ -12,8 +12,10 @@ import java.util.StringTokenizer;
  */
 public class LexicalAnalizer {
     
-    boolean program;
+    Program program;
     String programName;
+    
+    String token;
     
     String[] operatorData;
     String[] type;
@@ -21,9 +23,7 @@ public class LexicalAnalizer {
     
     public LexicalAnalizer(){
         this.operatorData = new String[]{"+", "-", "*", "/",">" , "<" , ">=" , "<=" , "==" , "!=", "&&", "||"};
-        
-        program = false;
-        programName = "";
+        token = " ";
         
     }
     
@@ -34,7 +34,9 @@ public class LexicalAnalizer {
         String type,identifier,expression;
          
         
-        st = new StringTokenizer(data, " ");
+            //token = " ";
+       
+        st = new StringTokenizer(data, token);
         try {
             type = st.nextToken();
             identifier = st.nextToken();
@@ -52,9 +54,12 @@ public class LexicalAnalizer {
        
         StringTokenizer st;
         String check;
-        String token = " ";
-        st = new StringTokenizer(data, token);
         
+        
+        if(program == null)
+            System.out.println("hello");
+        
+        st = new StringTokenizer(data, token);
         try {
 
             check = st.nextToken();
@@ -62,13 +67,13 @@ public class LexicalAnalizer {
 
             // START PROGRAM
             if(check.equals("PROGRAM")){
-                programName = st.nextToken();
+                String name = st.nextToken();
+                
 
             // BEGIN CODE BLOCK
             if(check.equals("BEGIN"))
-                program = true;
-
                 
+                program = new Program(st.nextToken());
             }
                 
             

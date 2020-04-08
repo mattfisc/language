@@ -47,12 +47,14 @@ public class TinyJavaApp {
     
     public static void main(String[] args) {
         TinyJavaApp p = new TinyJavaApp();
-        p.readFile();
         
-        String line = p.getLine();
+        String line;
         
         while(p.input.hasNext()){
-            if(p.analizer.program  == false)
+            p.readFile();
+            line = p.getLine();
+        
+            if(p.analizer.program  == null)
                 p.analizer.searchProgram(line);
             else
                 p.analizer.expression(line);
