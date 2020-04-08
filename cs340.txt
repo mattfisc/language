@@ -12,6 +12,7 @@ Grammar Table
 < >  enclose semantic qualifications
 (* *)comments
  -	 exception
+
 ----------------------------------------------------
 
 <arithmetic-operator> 	: '+' | '-' | '*' | '/'
@@ -39,15 +40,10 @@ Grammar Table
 <first-char> : <letter> | <underline>
 <other-char> : <letter> | <underline> | <digit>
 
-<character> : <letter> | <symbol> | <underline> | <digit>
-<string> : '"'  { <all-characters> -'"' } '"' ;
-
-
 <identifier> : <first-char>{<other-char>}
 
 <line-terminator> : ';'
-<if> : 'if'
-<else> : 'else'
+
 <assignment-token> : '='
 
 <type-declaration> : <type><identifier>
@@ -56,42 +52,22 @@ Grammar Table
 
 <expression> :  '('<expression>')' | <identifier> | <number> | <expression><arithmetic-operator><expression>
 
-<addsub-term> : <number> ('+'|'-') <number>
-<multidiv-term> : <number> ('*'|'/') <number>
-
-
-
-<relational-expression> : '('<relational-expression>')' | (<identifier> | <number>) <relational-operator> (<variable> | <number>)
-{<logical-operator><relational-expression>}
+<term> : <identifier> | <number>
+<relational-expression> : ( '('<relational-expression>')' | <term><relational-operator><term>  ){<logical-operator><relational-expression>}
 
 
 <assignment-statement> : <identifier><assignment-token><expression>
 
-<if-statement> : 'if' '(' <relational-expression> ')' <block> 
-				{'else if' '(' <relational-expression> ')' <block>} 
-				['else' <block>]
+<if-statement> : 'if' '(' <relational-expression> ')' <block> ['else' <block>]
 				
-<statement> : <type-declaration-statement><line-terminator>|<if-statement>
+<statement> : ( <assignment-statement> | <type-declaration-statement> ) <line-terminator> | <if-statement> 
 
-<block> : <statement>{<block>}
+<block> :  <if-one-line> | '{' {<statement>} '}' 
+
+<if-one-line>  :  <assignment-statement><line-terminator> | <if-statement> 
 
 <program> : 'PROGRAM' <identifier>
             'BEGIN' <block>
             'END'
 
-
-
----------------------------------------------------------------
-------------------------- do i need to do something like this
-<left> = <identifier> ;
-<right> = <identifier>
-     | <terminal>
-     | "[" , <rhs> , "]"
-     | "{" , <rhs> , "}"
-     | "(" , <rhs> , ")"
-     | <rhs> , "|" , <rhs>
-     | <rhs> , "," , <rhs> ;
-
-<rule> = <lhs> , "=" , <rhs> , ";" ;
-<grammar> = '{', <rule>, '}', ';'
 

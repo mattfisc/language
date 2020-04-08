@@ -14,18 +14,24 @@ public class LexicalAnalizer {
     
     boolean program;
     String programName;
-
+    
+    String[] operatorData;
+    String[] type;
+    String[] expression;
     
     public LexicalAnalizer(){
+        this.operatorData = new String[]{"+", "-", "*", "/",">" , "<" , ">=" , "<=" , "==" , "!=", "&&", "||"};
+        
         program = false;
         programName = "";
+        
     }
     
     
     public void expression(String data) {
         
-         StringTokenizer st;
-         String type,identifier,expression;
+        StringTokenizer st;
+        String type,identifier,expression;
          
         
         st = new StringTokenizer(data, " ");

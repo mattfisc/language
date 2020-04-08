@@ -6,6 +6,7 @@ package minijava;
 
 import java.awt.Color;
 import static java.awt.Color.getColor;
+import java.io.File;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -14,43 +15,50 @@ import java.util.Vector;
  *
  * @author Matthew Fischer
  */
+
 public class TinyJavaApp {
     
-    LexicalAnalizer analizer;
+    private LexicalAnalizer analizer;
     //String data;
+    private Scanner input;
+
     
     public TinyJavaApp(){
         analizer = new LexicalAnalizer();
         
+        
     }
         
+    public void readFile(){
+        
+        try{
+            input = new Scanner(new File("code.txt"));
+        }catch(Exception e){
+            System.out.println("Error reading file");
+        }
+      
+    }
+    
+    public String getLine(){
+        String data = input.nextLine();
+        return data;
+    }
     
     
     public static void main(String[] args) {
         TinyJavaApp p = new TinyJavaApp();
-
-        String[] data = 
-        {"PROGRAM p1"
-            , "BEGIN"
-            , "int x = 1;"
-            , "int y = 5;"
-            , "x = y;"
-            , "isnt z = 4;"
-            , "END"};
+        p.readFile();
         
-        for (String data1 : data) {
-            Scanner line = new Scanner(data1);
-            System.out.println(p.analizer.program);
+        String line = p.getLine();
+        
+        while(p.input.hasNext()){
             if(p.analizer.program  == false)
-                p.analizer.searchProgram(line.nextLine());
+                p.analizer.searchProgram(line);
             else
-                p.analizer.expression(line.nextLine());
-            
+                p.analizer.expression(line);
+        
         }
-        
 
-        
     }
 
-     
 }
