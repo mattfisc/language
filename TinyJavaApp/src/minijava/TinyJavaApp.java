@@ -25,17 +25,21 @@ public class TinyJavaApp {
     }
     
     public static void main(String[] args) {
-        LinkedList<Symbol> sList;
-        LinkedList<Token> tList;
+        LinkedList<Symbol> sList = new LinkedList();
+        LinkedList<Token> tList = new LinkedList();
         
         
         ReadInput reader = new ReadInput();
         reader.reader();
-        
-     
         for(int i = 0; i < reader.text.size(); i++){
             System.out.println( reader.getLine() );
         }
+        
+        
+        TType.java number = new TType.java();
+        Token t = new Token(number,"int",10,10);
+        
+        
 //        Parser parser;
 //        
 //        boolean success = true;

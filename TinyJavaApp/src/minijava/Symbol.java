@@ -29,6 +29,21 @@ public class Symbol {
         iValue = 0;
     }
     
+    public Symbol(String identifier, int iValue, TType type){
+        this.type = type;
+        this.identifier = identifier;
+        dValue = 0.0;
+        this.iValue = iValue;
+    }
+    
+    public Symbol(String identifier, double dValue, TType type){
+        this.type = type;
+        this.identifier = identifier;
+        this.dValue = dValue;
+        iValue = 0;
+    }
+    
+    
     public boolean add(String identifier){
         return list.add(new Symbol(identifier));
                 

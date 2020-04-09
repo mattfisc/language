@@ -50,3 +50,13 @@ enum TType {
     
     
 }
+
+
+public class Type {
+    
+    TType ttype;
+    
+    public Type(TType ttype){
+        this.ttype = ttype;
+    }
+}
