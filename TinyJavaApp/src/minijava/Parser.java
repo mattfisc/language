@@ -8,12 +8,13 @@ package minijava;
  *
  * @author Matthew Fischer
  */
-public class Program {
+public class Parser {
     
-    private String identifier;
-    
-    public Program(String id){
-        identifier = id;
+    public Parser(){
+        
     }
     
+//    public Token parseLine(String line){
+//        
+//    }
 }
