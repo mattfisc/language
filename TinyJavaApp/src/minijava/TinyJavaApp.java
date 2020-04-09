@@ -36,9 +36,10 @@ public class TinyJavaApp {
         }
         
         
-        TType.java number = new TType.java();
-        Token t = new Token(number,"int",10,10);
         
+        Token t = new Token(TType.number,"int",10,10);
+        tList.add(t);
+        System.out.println(t.col);
         
 //        Parser parser;
 //        
