@@ -5,7 +5,9 @@
 package minijava;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 /**
  *
@@ -13,28 +15,41 @@ import java.util.Scanner;
  */
 public class ReadInput {
     
-    String[] programText;
-    
-    public int line;
+    ArrayList<String> text;
     Scanner input;
-    
+
     public ReadInput(){
         try{
             input = new Scanner(new File("code.txt"));
         }catch(Exception e){
             System.out.println("error reading file");
         }
+  
+
+        text = new ArrayList();
         
-        int index = 0;
+    }
+    
+    public void reader(){
         
+        int count = 0;
         while(input.hasNextLine()){
-            programText[index] = input.nextLine();
+            count++;
+            text.add(input.nextLine());
         }
+        
     }
     
     // sent one line of code until null
     public String getLine(){
-        return programText[line];
+        if(text.isEmpty()){
+            return null;
+        }
+        
+        String x = text.get(0);
+        text.remove(0);
+
+        return x;
         
     }
 }

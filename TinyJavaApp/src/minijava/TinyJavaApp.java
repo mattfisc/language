@@ -29,7 +29,13 @@ public class TinyJavaApp {
         LinkedList<Token> tList;
         
         
-//        ReadInput reader = new ReadInput();
+        ReadInput reader = new ReadInput();
+        reader.reader();
+        reader.getLine();
+        
+        for(int i = 0; i <= reader.text.size(); i++){
+            System.out.println( reader.getLine() );
+        }
 //        Parser parser;
 //        
 //        boolean success = true;

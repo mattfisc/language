@@ -14,7 +14,10 @@ public class Parser {
         
     }
     
-//    public Token parseLine(String line){
-//        
-//    }
+    public void parseLine(String line){
+        // parse one line, until error, or end
+    }
+    
+    
+    // grammer rules
 }

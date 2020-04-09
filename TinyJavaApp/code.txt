@@ -1,6 +1,3 @@
-PROGRAM matt
-BEGIN
-
 int x = 3;
-
-END
+x = 5;
+x = 1;
