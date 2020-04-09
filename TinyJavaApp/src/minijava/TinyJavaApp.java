@@ -31,9 +31,9 @@ public class TinyJavaApp {
         
         ReadInput reader = new ReadInput();
         reader.reader();
-        reader.getLine();
         
-        for(int i = 0; i <= reader.text.size(); i++){
+     
+        for(int i = 0; i < reader.text.size(); i++){
             System.out.println( reader.getLine() );
         }
 //        Parser parser;

@@ -17,8 +17,10 @@ public class ReadInput {
     
     ArrayList<String> text;
     Scanner input;
+    int line;
 
     public ReadInput(){
+        line = 0;        
         try{
             input = new Scanner(new File("code.txt"));
         }catch(Exception e){
@@ -31,6 +33,7 @@ public class ReadInput {
     }
     
     public void reader(){
+
         
         int count = 0;
         while(input.hasNextLine()){
@@ -46,8 +49,8 @@ public class ReadInput {
             return null;
         }
         
-        String x = text.get(0);
-        text.remove(0);
+        String x = text.get(line);
+        line++;
 
         return x;
         
