@@ -1,6 +1,6 @@
 /*
  * By:     Matthew Fischer
- * Date:   
+ * Date:   4/10/2020
  */
 package minijava;
 
@@ -22,7 +22,6 @@ public class Token {
     
     // DEFAULT CONSTRUCTOR
     public Token(){
-        
         row = 0;
         col = 0;
         text = "";

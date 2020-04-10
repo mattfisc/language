@@ -1,6 +1,6 @@
 /*
  * By:     Matthew Fischer
- * Date:   
+ * Date:   4/10/2020
  */
 package minijava;
 
@@ -19,6 +19,7 @@ public class ReadInput {
     Scanner input;
     int line;
 
+    // CONSTRUCTOR
     public ReadInput(){
         line = 0;        
         try{
@@ -31,6 +32,7 @@ public class ReadInput {
         
     }
     
+    // GET FILE PROGRAM
     public void reader(){
         int count = 0;
         while(input.hasNextLine()){
@@ -40,7 +42,7 @@ public class ReadInput {
         
     }
     
-    // sent one line of code until null
+    // GET ONE LINE
     public String getLine(){
         if(text.isEmpty()){
             return null;
