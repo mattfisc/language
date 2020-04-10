@@ -30,8 +30,9 @@ public class Parser {
             String check = st.nextToken();
             
             // LAST CHARACTER IS SEMI COLON
+            // SUBTRACT SEMI COLON
             if(';' == check.charAt(check.length()-1))
-                check = check.substring(0,check.length()-1);//SUBTRACT SEMI COLON
+                check = check.substring(0,check.length()-1);
             
             // CHECK FOR NUMBER
             if(token == null){
@@ -39,25 +40,25 @@ public class Parser {
                 // IS A NUMBER
                 if(!value.equals("")){
                     token = new Token(TType.number,value,row,col);
-                    System.out.println(token.type + token.text);
+                    System.out.println(token.type +" "+ token.text);
                 }
             }
-//            // CHECK FOR RESERVED WORD
-//            if(token == null){
-//                value = isReservedWord(row,digit,check);//if else int double program begin end
-//                // IS A RESERVED WORD
-//                if(!value.equals("")){
-//                    token = new Token(TType.identifier,value,row,col);
-//                    System.out.println(token.type + token.text);
-//                }
-//            }
+            // CHECK FOR RESERVED WORD
+            if(token == null){
+                value = isReservedWord(row,digit,check);//if else int double program begin end
+                // IS A RESERVED WORD
+                if(!value.equals("")){
+                    token = new Token(TType.reservedWords,value,row,col);
+                    System.out.println(token.type +" "+ token.text);
+                }
+            }
             // CHECK IF IDENTIFIER
             if(token == null){
-                value = isIdentifier(row,digit,check);// VARIABLE NAME
+                value = isIdentifier(row,check);// VARIABLE NAME
                 // IS AN IDENTIFIER
                 if(!value.equals("")){
                     token = new Token(TType.identifier,value,row,col);
-                    System.out.println(token.type + token.text);
+                    System.out.println(token.type + " "+ token.text);
                 }
             }
            //if you have a token, position of next digit, \n \t " "  recursion parseline
@@ -81,7 +82,7 @@ public class Parser {
         }// END OF WHILE LOOP
 
     }
-    // Is Number
+    // IS A NUMBER
     public String isNumber(int row,int digit,String str){
 
         // IS CHAR A NUMBER
@@ -101,35 +102,46 @@ public class Parser {
         return str;
     }
     
+    // IS A RESERVED WORD
     public String isReservedWord(int row, int digit, String str){
         
-        if(str.equals("PROGRAM") && str.equals("BEGIN") && str.equals("END") 
-                && str.equals("if") && str.equals("else") && str.equals("int") && str.equals("double"))
-            return "true";
+        if(str.equals("PROGRAM"))
+            return "PROGRAM";
+        if( str.equals("BEGIN") )
+            return "BEGIN";
+        if( str.equals("END"))
+            return "END";
+        if(str.equals("if"))
+            return "if";
+        if(str.equals("else"))
+            return "else";
+        if (str.equals("int") )
+            return "int";
+        if( str.equals("double"))
+            return "double";
         return "";
         
     }
     
     
-    
-    public String isIdentifier(int row,int digit,String str){
+    // IS AN IDENTIFIER
+    public String isIdentifier(int row,String str){
         String valid = "";
         
-        //FIRST CHAR OF IDENTIFIER
-        if(str.charAt(0) >= 'A' && str.charAt(0) <= 'z' && str.charAt(0) == '_'){
-            valid = str.charAt(0) + isIdentifier(row,digit++,str);
-            System.out.println("is 1valid: " + valid);
-            
-           
+        // LENGTH EXIT
+        if( str.length() < 1 )
+            return valid;
+        
+        // FIRST CHAR OF IDENTIFIER
+        if(str.charAt(0) >= 'A' && str.charAt(0) <= 'z'|| str.charAt(0) == '_'){
+            valid += str.charAt(0) + isIdentifier(row,str.substring(1));
+
         }
-        //ALL OTHER CHAR OF IDENTIFIER
-        else if(str.charAt(digit) >= 'A' && str.charAt(digit) <= 'z' && str.charAt(digit) == '_' && str.charAt(digit) >= '0' && str.charAt(digit) <= '9'){
-            valid += str.charAt(digit) + isIdentifier(row,digit++,str);
-            System.out.println("is 2valid: " + valid);
-           
+        // ALL OTHER CHAR OF IDENTIFIER
+        else if( (str.charAt(0) >= 'A' && str.charAt(0) <= 'z') || str.charAt(0) == '_' || (str.charAt(0) >= '0' && str.charAt(0) <= '9') ){
+            valid += str.charAt(0) + isIdentifier(row,str.substring(1));
         }
 
-        System.out.println("is valid: " + valid);
         return valid;
     }
     

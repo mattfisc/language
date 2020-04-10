@@ -30,7 +30,7 @@ enum TType {
 //    first_char,
 //    other_char,
 //    
-    identifier
+    identifier,
 //    
 //    type_declaration,
 //    type_declaration_itialized,
@@ -46,7 +46,7 @@ enum TType {
 //    block,
 //    if_one_line,
 //    
-//    program
+    reservedWords
     
     
 }
