@@ -39,7 +39,7 @@ public class TinyJavaApp {
         
         Token t = new Token(TType.number,"int",10,10);
         tList.add(t);
-        System.out.println(t.col);
+        t.printToken();
         
 //        Parser parser;
 //        

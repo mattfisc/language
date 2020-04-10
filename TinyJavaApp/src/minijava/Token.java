@@ -11,34 +11,38 @@ import java.util.LinkedList;
  * @author Matthew Fischer
  */
 public class Token {
-    public static LinkedList<Token> list;
+    private static LinkedList<Token> list;
     
-    TType type;
-    String text;
+    private TType type;
+    private String text;
     
-    int line;// TOKEN ROW
-    int col;//  TOKEN COL
+    private int line;// TOKEN ROW
+    private int col;//  TOKEN COL
     
+    // DEFAULT CONSTRUCTOR
     public Token(){
         line = 0;
         col = 0;
-        
         text = "";
     }
+    
+    // CONSTRUCTOR
     public Token(TType type, String text, int line, int col){
         this.type = type;
         this.text = text;
         this.line = line;
         this.col = col;
     }
-    // contains //
+    
+    // CONTAINS
     public boolean add(Token token){
         return list.add(token);
     }
     
-    // printing errors
+    // PRINT ALL ATTRIBUTES
     public void printToken(){
-        // print everything
-        System.out.println(this.text);
+        System.out.println("Type: " + this.type + " int:" 
+                +this.text + "\nat row: " + this.line + " col: " 
+                + this.col);
     }
 }
