@@ -22,9 +22,10 @@ public class Token {
     
     // DEFAULT CONSTRUCTOR
     public Token(){
+        text = "";
         row = 0;
         col = 0;
-        text = "";
+        
     }
     
     // CONSTRUCTOR

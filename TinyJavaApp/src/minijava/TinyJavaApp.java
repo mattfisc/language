@@ -19,13 +19,22 @@ public class TinyJavaApp {
         
         ReadInput reader = new ReadInput();
         reader.reader();
+        
         Parser parser = new Parser();
         
-        for(String str : reader.text){
-            parser.parseLine(str);
+        boolean success = true;
+        int row = 0;
+        
+        for(String line : reader.text){
+            
+            System.out.println("row " + row+ " line: " + line + "\n");
+            
+            parser.parseLine(row,line);
+            
+            
+        
         }
-
-
+        
 
         
         
