@@ -19,15 +19,11 @@ import java.util.Vector;
 
 public class TinyJavaApp {
     
-        SLinkedList symbols;
-        TLinkedList tokens;
-    public TinyJavaApp(){
-        symbols = new SLinkedList();
-        tokens = new TLinkedList();
-    }
-    
+        
+  
     public static void main(String[] args) {
-        TinyJavaApp app  = new TinyJavaApp();
+      
+        
         
 //        ReadInput reader = new ReadInput();
 //        reader.reader();
@@ -35,7 +31,12 @@ public class TinyJavaApp {
 //            System.out.println( reader.getLine() );
 //        }
 //        
+        Token token = new Token();
+        Token.list.add(token);
         
+        Symbol.list.add(new Symbol("x"));
+        System.out.println(Symbol.findSymbol("y"));
+       
          
 //        Parser parser;
 //        

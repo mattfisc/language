@@ -14,11 +14,13 @@ import java.util.LinkedList;
  */
 public class Symbol {
 
-    private String identifier;
-    private TType type;
+    public static LinkedList<Symbol> list = new LinkedList<Symbol>();
     
-    private double dValue;
-    private int iValue;
+    public String identifier;
+    public TType type;
+    
+    public double dValue;
+    public int iValue;
 
     // CONSTRUCTOR
     public Symbol(String identifier){
@@ -27,41 +29,13 @@ public class Symbol {
         iValue = 0;
     }
     
-    
-    
-    // SETTERS AND GETTERS
-    public String getIdentifier() {
-        return identifier;
+    public static boolean findSymbol(String identifier){
+        for(int i = 0; i < list.size(); i++){
+            if(list.get(i).identifier == identifier){
+                return true;
+            }
+            
+        }
+        return false;
     }
-
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
-
-    public TType getType() {
-        return type;
-    }
-
-    public void setType(TType type) {
-        this.type = type;
-    }
-
-    public double getdValue() {
-        return dValue;
-    }
-
-    public void setdValue(double dValue) {
-        this.dValue = dValue;
-    }
-
-    public int getiValue() {
-        return iValue;
-    }
-
-    public void setiValue(int iValue) {
-        this.iValue = iValue;
-    }
-        
-    
-    
 }

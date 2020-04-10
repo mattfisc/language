@@ -12,15 +12,17 @@ import java.util.LinkedList;
  */
 public class Token {
     
+    public static LinkedList<Token> list = new LinkedList<Token>();
     
-    private TType type;
-    private String text;
+    public TType type;
+    public String text;
     
-    private int row;// TOKEN ROW
-    private int col;//  TOKEN COL
+    public int row;// TOKEN ROW
+    public int col;//  TOKEN COL
     
     // DEFAULT CONSTRUCTOR
     public Token(){
+        
         row = 0;
         col = 0;
         text = "";
@@ -33,44 +35,5 @@ public class Token {
         this.row = row;
         this.col = col;
     }
-    
-    
-
-    // GETTERS AND SETTERS
-    public TType getType() {
-        return type;
-    }
-
-    public void setType(TType type) {
-        this.type = type;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public int getRow() {
-        return row;
-    }
-
-    public void setRow(int line) {
-        this.row = row;
-    }
-
-    public int getCol() {
-        return col;
-    }
-
-    public void setCol(int col) {
-        this.col = col;
-    }
-    
-    
-    
-    
     
 }

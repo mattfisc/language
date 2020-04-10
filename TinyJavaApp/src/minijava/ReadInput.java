@@ -26,15 +26,12 @@ public class ReadInput {
         }catch(Exception e){
             System.out.println("error reading file");
         }
-  
-
+        
         text = new ArrayList();
         
     }
     
     public void reader(){
-
-        
         int count = 0;
         while(input.hasNextLine()){
             count++;
