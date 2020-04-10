@@ -19,28 +19,24 @@ import java.util.Vector;
 
 public class TinyJavaApp {
     
-    
+        SLinkedList symbols;
+        TLinkedList tokens;
     public TinyJavaApp(){
-        
+        symbols = new SLinkedList();
+        tokens = new TLinkedList();
     }
     
     public static void main(String[] args) {
-        LinkedList<Symbol> sList = new LinkedList();
-        LinkedList<Token> tList = new LinkedList();
+        TinyJavaApp app  = new TinyJavaApp();
         
+//        ReadInput reader = new ReadInput();
+//        reader.reader();
+//        for(int i = 0; i < reader.text.size(); i++){
+//            System.out.println( reader.getLine() );
+//        }
+//        
         
-        ReadInput reader = new ReadInput();
-        reader.reader();
-        for(int i = 0; i < reader.text.size(); i++){
-            System.out.println( reader.getLine() );
-        }
-        
-        
-        
-        Token t = new Token(TType.number,"int",10,10);
-        tList.add(t);
-        t.printToken();
-        
+         
 //        Parser parser;
 //        
 //        boolean success = true;
