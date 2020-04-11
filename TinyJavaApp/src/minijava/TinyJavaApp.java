@@ -26,13 +26,19 @@ public class TinyJavaApp {
         int row = 0;
         
         for(String line : reader.text){
+
+            success = parser.parseLine(row,line);
+            if(success == true){
+                System.out.println("row " + row + " code line:  IS VALID!!!\n" + line + "\n");
+            }
+            else{
+                System.out.println("ERROR on row " + row + " code line:\n" + line);
+            }
             
-            System.out.println("row " + row+ " line: " + line + "\n");
             
-            parser.parseLine(row,line);
-            
-            
-        
+            // RESET NEXT ROW
+            System.out.println("");// SPACE
+            row++;
         }
         
 

@@ -15,17 +15,17 @@ enum TType {
 //    letter,
 //    
 //    digit,
-//    integerN,
-//    doubleN,
+    integerN,
+    doubleN,
 //    
-//    arithmetic_operator,
-//    relational_operator,
-//    logical_operator,
+    arithmetic_operator,
+    relational_operator,
+    logical_operator,
 //    
 //    symbol,
 //    underline,
-//    line_terminator,
-//    assignment_token,
+    line_terminator,
+    assignment_token,
 //    
 //    first_char,
 //    other_char,

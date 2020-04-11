@@ -17,11 +17,11 @@ public class ReadInput {
     
     ArrayList<String> text;
     Scanner input;
-    int line;
+    int row;
 
     // CONSTRUCTOR
     public ReadInput(){
-        line = 0;        
+        row = 0;        
         try{
             input = new Scanner(new File("code.txt"));
         }catch(Exception e){
@@ -48,8 +48,8 @@ public class ReadInput {
             return null;
         }
         
-        String x = text.get(line);
-        line++;
+        String x = text.get(row);
+        row++;
 
         return x;
         

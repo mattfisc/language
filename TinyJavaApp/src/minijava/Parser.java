@@ -11,140 +11,230 @@ import java.util.StringTokenizer;
  * @author Matthew Fischer
  */
 public class Parser {
-    
+    StringTokenizer doubleTokenizer;
     public Parser(){
         
     }
     
-    public void parseLine(int row, String line){
+    public boolean parseLine(int row, String line){
         //parse one line, until error, or end
         StringTokenizer st = new StringTokenizer(line," ");
         
         Token token = null;
         int col = 0;
-        int digit = 0;
-        String value = "";
+        boolean last_is_semicolon = false;
         
+        // WORD
         while(st.hasMoreTokens()){
             // GET TOKEN
             String check = st.nextToken();
             
             // LAST CHARACTER IS SEMI COLON
-            // SUBTRACT SEMI COLON
-            if(';' == check.charAt(check.length()-1))
+            if(';' == check.charAt(check.length()-1)){
+                last_is_semicolon = true;
+                // DELETE SEMICOLON
                 check = check.substring(0,check.length()-1);
-            
+            }
             // CHECK FOR NUMBER
             if(token == null){
-                value = isNumber(row,digit,check);
-                // IS A NUMBER
-                if(!value.equals("")){
-                    token = new Token(TType.number,value,row,col);
-                    System.out.println(token.type +" "+ token.text);
-                }
+                token = numbersCheck(check,row,col);
+                if(token != null)// TESTER
+                    System.out.println("New Token: " + token.type +" "+ token.text);
             }
             // CHECK FOR RESERVED WORD
             if(token == null){
-                value = isReservedWord(row,digit,check);//if else int double program begin end
+                token = isReservedWord(check,row,col);//if else int double program begin end
                 // IS A RESERVED WORD
-                if(!value.equals("")){
-                    token = new Token(TType.reservedWords,value,row,col);
-                    System.out.println(token.type +" "+ token.text);
-                }
+                if(token != null)// TESTER
+                    System.out.println("New Token: " + token.type +" "+ token.text);
             }
             // CHECK IF IDENTIFIER
             if(token == null){
-                value = isIdentifier(row,check);// VARIABLE NAME
+                token = isIdentifier(check,row, col);// VARIABLE NAME
                 // IS AN IDENTIFIER
-                if(!value.equals("")){
-                    token = new Token(TType.identifier,value,row,col);
-                    System.out.println(token.type + " "+ token.text);
-                }
+                if(token != null)// TESTER
+                    System.out.println("New Token: " + token.type +" "+ token.text);
             }
-           //if you have a token, position of next digit, \n \t " "  recursion parseline
-        
-        //
-//        if(token != null){
-//            boolean success = parseLine(row,digit,check);// recall
-//        }
-            
-            
-            
-            
+            // CHECK IF ASSIGNMENT OPERATOR
+            if(token == null){
+                token = is_assignment_operator(check,row, col);// VARIABLE NAME
+                // IS AN IDENTIFIER
+                if(token != null)// TESTER
+                    System.out.println("New Token: " + token.type +" "+ token.text);
+            }
+            // CHECK IF LOGICAL OPERATOR
+            if(token == null){
+                token = logical_operator(check,row, col);// VARIABLE NAME
+                // IS AN IDENTIFIER
+                if(token != null)// TESTER
+                    System.out.println("New Token: " + token.type +" "+ token.text);
+            }
+            // CHECK IF ARITHMETIC OPERATOR
+            if(token == null){
+                token = arithmetic_operators(check,row, col);// VARIABLE NAME
+                // IS AN IDENTIFIER
+                if(token != null)// TESTER
+                    System.out.println("New Token: " + token.type +" "+ token.text);
+            }
             
             // ADD TOKEN
-            Token.list.add(token);
+            if(token != null){
+                Token.list.add(token);
+                // ADD SEMI COLON TOKEN IF FOUND TRUE
+                if(last_is_semicolon)
+                    Token.list.add(new Token(TType.line_terminator,";",row,col));
+            }
             
-            // RESET for next iteration in word
+            // RESET
+            col++;
             token = null;
-            col++; // next col
-            value = "";
-        }// END OF WHILE LOOP
+        }// END OF WHILE LOOP // END OF WORD
+        
+        // CHECK IF STATEMENT IS VALID
+        // check by col
+        for(int i = 0; i < Token.list.size();i++){
+            
+        }
+        return false;
+        // return false;
 
     }
     // IS A NUMBER
-    public String isNumber(int row,int digit,String str){
-
+    public Token numbersCheck(String str, int row, int col){
+        int digit = 0;
+        String numbers = "";
+        Token t = null;
+        
         // IS CHAR A NUMBER
-        if(str.charAt(digit) >= 48 && str.charAt(digit) <= 57){
-            //i = str.charAt(0)- '0';
+        // FIRST CHAR IS NUMBER
+        if(str.charAt(0) >= '0' && str.charAt(0) <= '9'){
+            numbers = str.charAt(0) + numbers;
+            // MORE THAN ONE DIGIT NUMBER
+            if(str.length()>1){
+                digit++;
+                while(digit < str.length() && str.charAt(digit) >= '0' && str.charAt(digit) <= '9'){
+                    numbers = str.charAt(digit) + numbers;
+                    digit++;
+                }
+            }
             
-            // SINGLE DIGIT
-            if(digit == str.length()-1)
-                return str;
-            
-            str = str.charAt(digit) + isNumber(row,digit++,str.substring(digit++));
-            
-            
-        }
-        else
-            return "";
-        return str;
+            // END IS NOT VALID
+            if( digit == str.length()-1 ){
+                
+                // DOUBLE CHECK
+                if(str.contains(".")){
+                    if(isDouble(str))
+                        t = new Token(TType.doubleN,numbers,row,digit-1);  
+                }
+                else
+                    t = new Token(TType.integerN,numbers,row,digit-1);   
+            }  
+        }// END OF NUMBER   
+        return t;
     }
     
     // IS A RESERVED WORD
-    public String isReservedWord(int row, int digit, String str){
+    public Token isReservedWord(String str, int row, int col){
         
         if(str.equals("PROGRAM"))
-            return "PROGRAM";
+            return new Token(TType.reservedWords,str,row,col);
         if( str.equals("BEGIN") )
-            return "BEGIN";
+            return new Token(TType.reservedWords,str,row,col);
         if( str.equals("END"))
-            return "END";
+            return new Token(TType.reservedWords,str,row,col);
         if(str.equals("if"))
-            return "if";
+            return new Token(TType.reservedWords,str,row,col);
         if(str.equals("else"))
-            return "else";
+            return new Token(TType.reservedWords,str,row,col);
         if (str.equals("int") )
-            return "int";
+            return new Token(TType.reservedWords,str,row,col);
         if( str.equals("double"))
-            return "double";
-        return "";
+            return new Token(TType.reservedWords,str,row,col);
+        return null;
         
     }
     
     
     // IS AN IDENTIFIER
-    public String isIdentifier(int row,String str){
-        String valid = "";
-        
-        // LENGTH EXIT
-        if( str.length() < 1 )
-            return valid;
+    public Token isIdentifier(String str,int row, int col){
+        int digit = 0;
+        Token t = null;
         
         // FIRST CHAR OF IDENTIFIER
-        if(str.charAt(0) >= 'A' && str.charAt(0) <= 'z'|| str.charAt(0) == '_'){
-            valid += str.charAt(0) + isIdentifier(row,str.substring(1));
-
+        if(str.charAt(digit) == '_' || str.charAt(digit) >= 'A' && str.charAt(digit) <= 'z'){
+            digit++;
+         
+            // OTHER CHAR OF IDENTIFIER
+            while( digit < str.length() && ( (str.charAt(digit) >= 'A' && str.charAt(digit) <= 'z') || str.charAt(digit) == '_' || (str.charAt(digit) >= '0' && str.charAt(digit) <= '9') ) ) {
+                digit++;
+            }
+            
+            // END IS NOT VALID
+            if( digit != str.length()-1 )
+                t = new Token(TType.identifier,str,row,digit-1);
         }
         // ALL OTHER CHAR OF IDENTIFIER
-        else if( (str.charAt(0) >= 'A' && str.charAt(0) <= 'z') || str.charAt(0) == '_' || (str.charAt(0) >= '0' && str.charAt(0) <= '9') ){
-            valid += str.charAt(0) + isIdentifier(row,str.substring(1));
-        }
-
-        return valid;
+        return t;
     }
     
+    // CHECK DOUBLE OR INTEGER
+    public boolean isDouble(String value){
+        boolean is_double = false;
+        
+        for(int i = 0; i < value.length(); i++){
+            // CONTAINS ONE DECIMAL POINT
+            if(value.charAt(i) == '.'){
+                // DOES NOT CONATAIN TWO DECIMAL POINTS
+                if(!value.substring(i+1).contains("."))
+                    return is_double;
+            }
+                
+        }
+        return is_double;
+    }
+    // ARITHMETIC OPERATORS
+    public Token arithmetic_operators(String value,int row,int col){
+        Token t = null;
+        if( value.equals("+") || value.equals("-") || value.equals("*") || value.equals("/") )
+            t = new Token(TType.arithmetic_operator,value,row,col);
+            
+       return t;
+    }
+    
+    // RELATIONAL OPERATORS
+    public Token relational_operators(String value,int row,int col){
+        Token t = null;
+        if(value.equals("==") || value.equals("!=") || value.equals(">") || value.equals("<") || value.equals("<=") || value.equals(">="))
+            t = new Token(TType.relational_operator,value,row,col);
+            
+       return t;
+    }
+    
+    // LOGICAL OPERATORS
+    public Token logical_operator(String value,int row,int col){
+        Token t = null;
+        if(value.equals("&&") || value.equals("||"))
+            t = new Token(TType.logical_operator,value,row,col);
+            
+       return t;
+    }
+    // IS ASSIGNMENT OPERATOR
+    public Token is_assignment_operator(String value,int row,int col){
+        Token t = null;
+        if(value.charAt(0) == '=')
+            t = new Token(TType.assignment_token,value,row,col);
+            
+       return t;
+    }
+    
+    
+    // STATEMENTS
+    public boolean check_statements(Type first,Type second){
+        if(first == TType.number)
+            System.out.println("declaration of variable");
+        
+        return true;
+    }
     
     // grammer rules
 }
