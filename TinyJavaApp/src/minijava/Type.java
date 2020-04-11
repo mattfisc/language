@@ -17,6 +17,8 @@ enum TType {
 //    digit,
     integerN,
     doubleN,
+    parenthesis,
+    white_space,
 //    
     arithmetic_operator,
     relational_operator,

@@ -13,100 +13,76 @@ import java.util.StringTokenizer;
  */
 public class Parser {
     StringTokenizer doubleTokenizer;
-    public Parser(){
-        
-    }
     
-    public boolean parseLine(int row, String line){
+    
+    public boolean parseLine(String line,int row, int col){
         //parse one line, until error, or end
-        StringTokenizer st = new StringTokenizer(line," ");
+       
         
         Token token = null;
-        int col = 0;
+
         boolean last_is_semicolon = false;
         boolean valid_line_code = false;
-        
-        // WORD
-        while(st.hasMoreTokens()){
-            // GET TOKEN
-            String check = st.nextToken();
-            
-            // LAST CHARACTER IS SEMI COLON
-            if(';' == check.charAt(check.length()-1)){
-                last_is_semicolon = true;
-                // DELETE SEMICOLON
-                check = check.substring(0,check.length()-1);
-            }
-            // CHECK FOR NUMBER
-            if(token == null){
-                token = numbersCheck(check,row,col);
-                if(token != null)// TESTER
-                    System.out.println("New Token: " + token.type +" "+ token.text);
-            }
-            // CHECK FOR RESERVED WORD
-            if(token == null){
-                token = isReservedWord(check,row,col);//if else int double program begin end
-                // IS A RESERVED WORD
-                if(token != null)// TESTER
-                    System.out.println("New Token: " + token.type +" "+ token.text);
-            }
-            // CHECK IF IDENTIFIER
-            if(token == null){
-                token = isIdentifier(check,row, col);// VARIABLE NAME
-                // IS AN IDENTIFIER
-                if(token != null)// TESTER
-                    System.out.println("New Token: " + token.type +" "+ token.text);
-            }
-            // CHECK IF ASSIGNMENT OPERATOR
-            if(token == null){
-                token = is_assignment_operator(check,row, col);// VARIABLE NAME
-                // IS AN IDENTIFIER
-                if(token != null)// TESTER
-                    System.out.println("New Token: " + token.type +" "+ token.text);
-            }
-            // CHECK IF LOGICAL OPERATOR
-            if(token == null){
-                token = logical_operator(check,row, col);// VARIABLE NAME
-                // IS AN IDENTIFIER
-                if(token != null)// TESTER
-                    System.out.println("New Token: " + token.type +" "+ token.text);
-            }
-            // CHECK IF ARITHMETIC OPERATOR
-            if(token == null){
-                token = arithmetic_operators(check,row, col);// VARIABLE NAME
-                // IS AN IDENTIFIER
-                if(token != null)// TESTER
-                    System.out.println("New Token: " + token.type +" "+ token.text);
-            }
-            
-            // ADD TOKEN
-            if(token != null){
-                Token.list.add(token);
-                // ADD SEMI COLON TOKEN IF FOUND TRUE
-                if(last_is_semicolon)
-                    Token.list.add(new Token(TType.line_terminator,";",row,col));
-            }
-            
-            // RESET
-            col++;
-            token = null;
-        }// END OF WHILE LOOP // END OF WORD
-        
-        
-        ArrayList<Token> codeLine = new ArrayList<Token>();
-        // CHECK IF LINE STATEMENT IS VALID
-        for(int i = 0; i < Token.list.size()-1;i++){//LINE
-            for(int j = 1; j < Token.list.size();j++){
-                codeLine.add( Token.list.get(i) );
-                if(Token.list.get(i).row == Token.list.get(j).row)
-                    codeLine.add( Token.list.get(j) );
-            }
-            // check valid line
-            
-            // reset arraylist
-            codeLine = new ArrayList<Token>();
+
+        if(col >= line.length()){
+            return true;
         }
-        return valid_line_code;
+        // WHITE SPACE
+        if(token == null){
+            token = is_whitespace(line,row,col);
+        }
+        // CHECK FOR NUMBER
+        if(token == null){
+            token = numbersCheck(line,row,col);
+
+        }
+        // CHECK FOR RESERVED WORD
+        if(token == null){
+            token = isReservedWord(line,row,col);//if else int double program begin end
+            //  is_whitespace( str.charAt(col+ reserved[i].length() 
+        }
+        // CHECK IF IDENTIFIER
+        if(token == null){
+            token = isIdentifier(line,row, col);// VARIABLE NAME
+        }
+        
+        // CHECK IF LOGICAL OPERATOR
+        if(token == null){
+            token = logical_operator(line,row, col);// VARIABLE NAME
+        }
+        // CHECK IF ARITHMETIC OPERATOR
+        if(token == null){
+            token = arithmetic_operators(line,row, col);// VARIABLE NAME
+        }
+        // CHECK IF LINE TERMINATOR
+        if(token == null){
+            token = line_terminator(line,row, col);// VARIABLE NAME
+        }
+        if(token == null){
+            token = relational_operators(line,row, col);// VARIABLE NAME
+        }
+        // CHECK IF ASSIGNMENT OPERATOR
+        if(token == null){
+            token = is_assignment_operator(line,row, col);// VARIABLE NAME
+        }
+        // CHECK IF ASSIGNMENT OPERATOR
+        if(token == null){
+            token = parenthesis(line,row, col);// VARIABLE NAME
+        }
+
+        if(token != null){
+            col = col + token.text.length();
+            print_token(token);
+        }
+        
+        // END OF LINE
+        if( col >= line.length() ){
+            return true;
+        }
+        else{
+            return parseLine(line,row,col);
+        }
+        
         // return false;
 
     }
@@ -118,49 +94,34 @@ public class Parser {
         
         // IS CHAR A NUMBER
         // FIRST CHAR IS NUMBER
-        if(str.charAt(0) >= '0' && str.charAt(0) <= '9'){
-            numbers = str.charAt(0) + numbers;
+        if(str.charAt(col) >= '0' && str.charAt(col) <= '9'){
+            numbers = numbers + str.charAt(col);
             // MORE THAN ONE DIGIT NUMBER
-            if(str.length()>1){
-                digit++;
-                while(digit < str.length() && str.charAt(digit) >= '0' && str.charAt(digit) <= '9'){
-                    numbers = str.charAt(digit) + numbers;
-                    digit++;
-                }
-            }
             
-            // END IS NOT VALID
-            if( digit == str.length()-1 ){
-                
-                // DOUBLE CHECK
-                if(str.contains(".")){
-                    if(isDouble(str))
-                        t = new Token(TType.doubleN,numbers,row,digit-1);  
-                }
-                else
-                    t = new Token(TType.integerN,numbers,row,digit-1);   
-            }  
+            digit++;
+            while(digit+col < str.length() && str.charAt(col+digit) >= '0' && str.charAt(col+digit) <= '9'){
+                numbers = numbers + str.charAt(col+digit);
+                digit++;
+            }
+
+            t = new Token(TType.number,numbers,row,col);   
+              
         }// END OF NUMBER   
         return t;
     }
-    
+
     // IS A RESERVED WORD
     public Token isReservedWord(String str, int row, int col){
+        String temp = str.substring(col);
         
-        if(str.equals("PROGRAM"))
-            return new Token(TType.reservedWords,str,row,col);
-        if( str.equals("BEGIN") )
-            return new Token(TType.reservedWords,str,row,col);
-        if( str.equals("END"))
-            return new Token(TType.reservedWords,str,row,col);
-        if(str.equals("if"))
-            return new Token(TType.reservedWords,str,row,col);
-        if(str.equals("else"))
-            return new Token(TType.reservedWords,str,row,col);
-        if (str.equals("int") )
-            return new Token(TType.reservedWords,str,row,col);
-        if( str.equals("double"))
-            return new Token(TType.reservedWords,str,row,col);
+        
+        String[] reserved = {"PROGRAM","BEGIN","END","if","else","int","double"};
+        for(int i = 0; i < reserved.length; i++){
+            if( str.startsWith(reserved[i], col) ){
+                return new Token(TType.reservedWords,reserved[i],row,col);
+            }
+        }
+        
         return null;
         
     }
@@ -172,17 +133,20 @@ public class Parser {
         Token t = null;
         
         // FIRST CHAR OF IDENTIFIER
-        if(str.charAt(digit) == '_' || str.charAt(digit) >= 'A' && str.charAt(digit) <= 'z'){
+        if(str.charAt(col+digit) == '_' || str.charAt(col+digit) >= 'A' && str.charAt(col+digit) <= 'Z'
+                || (str.charAt(col+digit) >= 'a' && str.charAt(col+digit) <= 'z')){
             digit++;
          
             // OTHER CHAR OF IDENTIFIER
-            while( digit < str.length() && ( (str.charAt(digit) >= 'A' && str.charAt(digit) <= 'z') || str.charAt(digit) == '_' || (str.charAt(digit) >= '0' && str.charAt(digit) <= '9') ) ) {
+            while( digit+col < str.length() && ((str.charAt(col+digit) >= 'A' && str.charAt(col+digit) <= 'Z') 
+                    || (str.charAt(col+digit) >= 'a' && str.charAt(col+digit) <= 'z')
+                    || str.charAt(col+digit) == '_' 
+                    || (str.charAt(col+digit) >= '0' && str.charAt(col+digit) <= '9') ) ){
                 digit++;
             }
-            
-            // END IS NOT VALID
-            if( digit != str.length()-1 )
-                t = new Token(TType.identifier,str,row,digit-1);
+           
+            t = new Token(TType.identifier,str.substring(col,col+digit),row,col); 
+           
         }
         // ALL OTHER CHAR OF IDENTIFIER
         return t;
@@ -203,65 +167,97 @@ public class Parser {
         }
         return is_double;
     }
+    
     // ARITHMETIC OPERATORS
-    public Token arithmetic_operators(String value,int row,int col){
+    public Token arithmetic_operators(String str,int row,int col){
         Token t = null;
-        if( value.equals("+") || value.equals("-") || value.equals("*") || value.equals("/") )
-            t = new Token(TType.arithmetic_operator,value,row,col);
+        if(str.charAt(col) == '+' || str.charAt(col) == '-' || str.charAt(col) == '*' || str.charAt(col) == '/')
+            t = new Token(TType.arithmetic_operator,str.substring(col, col+1),row,col);
             
        return t;
     }
     
     // RELATIONAL OPERATORS
-    public Token relational_operators(String value,int row,int col){
+    public Token relational_operators(String str,int row,int col){
         Token t = null;
-        if(value.equals("==") || value.equals("!=") || value.equals(">") || value.equals("<") || value.equals("<=") || value.equals(">="))
-            t = new Token(TType.relational_operator,value,row,col);
+        String[] relational ={"!=","==",">=","<=","<",">"};
+        for(int i = 0; i < relational.length; i++){
+            if( str.startsWith(relational[i], col) ){
+                return new Token(TType.relational_operator,relational[i],row,col);
+            }
+        }
             
        return t;
     }
     
     // LOGICAL OPERATORS
-    public Token logical_operator(String value,int row,int col){
+    public Token logical_operator(String str,int row,int col){
         Token t = null;
-        if(value.equals("&&") || value.equals("||"))
-            t = new Token(TType.logical_operator,value,row,col);
-            
+        String[] logical ={"&&","||"};
+        for(int i = 0; i < logical.length; i++){
+            if( str.startsWith(logical[i], col) ){
+                return new Token(TType.logical_operator,logical[i],row,col);
+            }
+        }
        return t;
     }
     // IS ASSIGNMENT OPERATOR
-    public Token is_assignment_operator(String value,int row,int col){
+    public Token is_assignment_operator(String str,int row,int col){
         Token t = null;
-        if(value.charAt(0) == '=')
-            t = new Token(TType.assignment_token,value,row,col);
+        if(str.charAt(col) == '=')
+            t = new Token(TType.assignment_token,"=",row,col);
             
        return t;
     }
-    //Expression
-    public boolean is_expression(Type first,Type second,Type third){
+
+    public Token is_whitespace(String str, int row, int col){
+        Token t = null;
+        int digit = 0;
         
-        if(first == TType.identifier || first == TType.doubleN || first == TType.integerN)
-            return true;
-        return false;
+       
+        if(str.charAt(col+digit) == ' ' || str.charAt(col+digit) == '\n' && str.charAt(col+digit) == '\t'){
+            digit++;
+         
+            // OTHER CHAR OF IDENTIFIER
+            while(digit+col < str.length() &&  (str.charAt(col+digit) == ' ' 
+                    || str.charAt(col+digit) == '\n' && str.charAt(col+digit) == '\t')) {
+                digit++;
+            }
+           
+            t = new Token(TType.white_space,str.substring(col,col+digit),row,col); 
+           
+        }
+       return t;
+    }
+    // LOGICAL OPERATORS
+    public Token parenthesis(String str,int row,int col){
+        Token t = null;
+        String[] paren ={"(",")"};
+        for(int i = 0; i < paren.length; i++){
+            if( str.startsWith(paren[i], col) ){
+                return new Token(TType.parenthesis,paren[i],row,col);
+            }
+        }
+       return t;
     }
     
-    // STATEMENTS
-    public boolean check_statements(Type first,Type second,Type third,Type fourth){
-        // TYPE DECLARATION 
-        boolean type_declaration = false;
-        if(first == TType.integerN || first == TType.doubleN){
-            if(second == TType.identifier)
-                type_declaration = true;
+    public Token line_terminator(String str,int row,int col){
+        Token t = null;
+        if(str.charAt(col) == ';')
+            t = new Token(TType.line_terminator,";",row,col);
             
-        }
-        // TYPE DECLARATION INTIALIZED
-        if(type_declaration && second == TType.assignment_token && third == TType.expression){
-            if(second == TType.identifier)
-                return true;
-            
-        }
-        return false;
+       return t;
     }
     
-    // grammer rules
+    //PRINT TOKEN
+    public void print_token(Token token){
+        if(token.type == TType.white_space)
+            System.out.println(token.type + ": " + " ");
+        else
+            System.out.println(token.type + ": " + token.text);
+        
+       
+    }
+    
+    
 }

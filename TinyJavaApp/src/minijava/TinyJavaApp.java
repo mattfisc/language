@@ -27,7 +27,8 @@ public class TinyJavaApp {
         
         for(String line : reader.text){
 
-            success = parser.parseLine(row,line);
+            success = parser.parseLine(line,row,0);
+            
             if(success == true){
                 System.out.println("row " + row + " code line:  IS VALID!!!\n" + line + "\n");
             }
