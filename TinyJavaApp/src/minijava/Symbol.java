@@ -32,10 +32,8 @@ public class Symbol {
     // FIND SYMBOL
     public static boolean findSymbol(String identifier){
         for(int i = 0; i < list.size(); i++){
-            if(list.get(i).identifier == identifier){
+            if(list.get(i).identifier == identifier)
                 return true;
-            }
-            
         }
         return false;
     }

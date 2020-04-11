@@ -17,6 +17,9 @@ enum TType {
 //    digit,
     integerN,
     doubleN,
+    decimal,
+    
+    block,
     parenthesis,
     white_space,
 //    
@@ -48,6 +51,7 @@ enum TType {
 //    block,
 //    if_one_line,
 //    
+    restricted,
     reservedWords
     
     
