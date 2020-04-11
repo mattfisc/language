@@ -4,6 +4,7 @@
  */
 package minijava;
 
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 /**
@@ -23,6 +24,7 @@ public class Parser {
         Token token = null;
         int col = 0;
         boolean last_is_semicolon = false;
+        boolean valid_line_code = false;
         
         // WORD
         while(st.hasMoreTokens()){
@@ -90,12 +92,21 @@ public class Parser {
             token = null;
         }// END OF WHILE LOOP // END OF WORD
         
-        // CHECK IF STATEMENT IS VALID
-        // check by col
-        for(int i = 0; i < Token.list.size();i++){
+        
+        ArrayList<Token> codeLine = new ArrayList<Token>();
+        // CHECK IF LINE STATEMENT IS VALID
+        for(int i = 0; i < Token.list.size()-1;i++){//LINE
+            for(int j = 1; j < Token.list.size();j++){
+                codeLine.add( Token.list.get(i) );
+                if(Token.list.get(i).row == Token.list.get(j).row)
+                    codeLine.add( Token.list.get(j) );
+            }
+            // check valid line
             
+            // reset arraylist
+            codeLine = new ArrayList<Token>();
         }
-        return false;
+        return valid_line_code;
         // return false;
 
     }
@@ -226,14 +237,30 @@ public class Parser {
             
        return t;
     }
-    
+    //Expression
+    public boolean is_expression(Type first,Type second,Type third){
+        
+        if(first == TType.identifier || first == TType.doubleN || first == TType.integerN)
+            return true;
+        return false;
+    }
     
     // STATEMENTS
-    public boolean check_statements(Type first,Type second){
-        if(first == TType.number)
-            System.out.println("declaration of variable");
-        
-        return true;
+    public boolean check_statements(Type first,Type second,Type third,Type fourth){
+        // TYPE DECLARATION 
+        boolean type_declaration = false;
+        if(first == TType.integerN || first == TType.doubleN){
+            if(second == TType.identifier)
+                type_declaration = true;
+            
+        }
+        // TYPE DECLARATION INTIALIZED
+        if(type_declaration && second == TType.assignment_token && third == TType.expression){
+            if(second == TType.identifier)
+                return true;
+            
+        }
+        return false;
     }
     
     // grammer rules

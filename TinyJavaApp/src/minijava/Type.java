@@ -36,7 +36,7 @@ enum TType {
 //    type_declaration_itialized,
 //    type_declaration_statement,
 //    
-//    expression,
+    expression,
 //    term,
 //    
 //    relational_expression,
