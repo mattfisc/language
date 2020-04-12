@@ -14,10 +14,16 @@ import java.util.StringTokenizer;
 public class Parser {
 
     public boolean parseLine(String line,int row, int col){
+
         //parse one line, until error, or end
         Token token = null;
-
-
+        Token l = new Token(TType.line,line,row,col);
+        
+        if(col == 0){
+            Token.list.add(l);
+            //Tester
+            System.out.println("Code\t: " + l.text);
+        }
 
         if(col >= line.length()){
             return true;
@@ -25,6 +31,10 @@ public class Parser {
         // WHITE SPACE
         if(token == null){
             token = is_whitespace(line,row,col);
+        }
+        // COMMENT
+        if(token == null){
+            token = is_comment(line,row,col);
         }
         // CHECK FOR NUMBER
         if(token == null){
@@ -79,23 +89,20 @@ public class Parser {
 
         if(token != null){
             col = col + token.text.length();
+            Token.list.add(token);
             print_token(token);
         }
         
         // END OF LINE
         if( col >= line.length() ){
             // CHECK VALID STATMENT
-            // is_statement();
+            System.out.println("");
             return true;
         }
         else{
-            // ERROR PRINT 
-
             return parseLine(line,row,col);
         }
-        
-//        System.out.println("Error on row:" + row + " col: " + col + " invalid token.");
-//        return false;
+
     }// END OF PARSE LINE
     // IS A NUMBER
     public Token is_numbersCheck(String str, int row, int col){
@@ -116,7 +123,7 @@ public class Parser {
             }
 
             t = new Token(TType.number,numbers,row,col);   
-            is_double(col);
+            //is_double(col);
         }// END OF NUMBER   
         return t;
     }
@@ -220,14 +227,31 @@ public class Parser {
             
        return t;
     }
+    // IS ASSIGNMENT OPERATOR
+    public Token is_comment(String str,int row,int col){
+        Token t = null;
+        if(str.length()-col > 3 && str.substring(col, col+2).equals("//"))
+            t = new Token(TType.comment,str.substring(col),row,col);
+            
+       return t;
+    }
 
     public Token is_whitespace(String str, int row, int col){
+        int digit = 0;
         Token t = null;
-        char[] w ={' ','\n','\t','\r'};
-        for(int i = 0; i < w.length; i++){
-            if( str.charAt(col) == w[i]){
-                return new Token(TType.white_space," ",row,col);
+        
+        // FIRST CHAR
+        if(str.charAt(col) == ' ' || str.charAt(col) == '\t' 
+                || str.charAt(col) == '\n' || str.charAt(col) == '\r'){
+            digit++;
+            // OTHER CHAR OF IDENTIFIER
+            while(digit+col < str.length() && (str.charAt(col) == ' ' || str.charAt(col) =='\t' 
+                || str.charAt(col) == '\n' || str.charAt(col) == '\r')){
+                digit++;
             }
+           
+            t = new Token(TType.white_space," ",row,col); 
+           
         }
             
        return t;
@@ -288,34 +312,34 @@ public class Parser {
     
     //PRINT TOKEN
     public void print_token(Token token){
-        if(token.type != TType.white_space)
-            System.out.println(token.type + ": " + token.text);
+        if(token.type != TType.comment)
+            System.out.println(token.text + "\t: " + token.type);
             
         else
-            System.out.println(token.type + ": " + " ");
+            System.out.println(token.text + " : " + token.type);
 
     }
     
     // CHECK ALL NUMBERS IF DOUBLE
-    public void is_double(int index){
-        if(Token.list.size() > 1){
-            if(Token.list.get(index).type == TType.number){
-                // IF DOUBLE AND SIZE IS BIGGER THAN 2
-
-                if(Token.list.get(index-1).type == TType.decimal 
-                    && Token.list.get(index-2).type == TType.number){
-                    // EDIT TOKEN TYPE
-                    Token.list.get(index-2).type = TType.doubleN;
-                    //EDIT TOKEN TEXT
-                    Token.list.get(index-2).text = Token.list.get(index-2).text 
-                            + Token.list.get(index-1).text + Token.list.get(index);
-                    Token.list.remove(index-1);
-                    Token.list.remove(index);     
-                }
-            }
-            
-        }
-    }
+//    public void is_double(int index){
+//        if(Token.list.size() > 1){
+//            if(Token.list.get(index).type == TType.number){
+//                // IF DOUBLE AND SIZE IS BIGGER THAN 2
+//
+//                if(Token.list.get(index-1).type == TType.decimal 
+//                    && Token.list.get(index-2).type == TType.number){
+//                    // EDIT TOKEN TYPE
+//                    Token.list.get(index-2).type = TType.doubleN;
+//                    //EDIT TOKEN TEXT
+//                    Token.list.get(index-2).text = Token.list.get(index-2).text 
+//                            + Token.list.get(index-1).text + Token.list.get(index);
+//                    Token.list.remove(index-1);
+//                    Token.list.remove(index);     
+//                }
+//            }
+//            
+//        }
+//    }
 //    public void is_statement(){
 //        
 //    }

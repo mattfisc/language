@@ -19,22 +19,26 @@ public class TinyJavaApp {
         
         ReadInput reader = new ReadInput();
         reader.reader();
-        
         Parser parser = new Parser();
         
         boolean success = true;
         int row = 0;
         
+        // PASS ONE
         for(String line : reader.text){
             
-            System.out.println("row " + row + "\ncode line: " + line );
-            System.out.println("=======================");
+            System.out.println("Line : " + row + "\n====================");
             success = parser.parseLine(line,row,0);
             
             
-            // RESET NEXT ROW
-            System.out.println("\n");// SPACE
+            
             row++;
+        }
+        // PASS TWO
+            
+        for(Token t : Token.list){
+            
+            
         }
         
 

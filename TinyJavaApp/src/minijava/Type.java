@@ -51,6 +51,8 @@ enum TType {
 //    block,
 //    if_one_line,
 //    
+    comment,
+    line,
     restricted,
     reservedWords
     
