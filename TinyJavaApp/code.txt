@@ -1,3 +1,2 @@
-PROGRAM matt
+PROGRAM MATT
 BEGIN
-int variablename = 24;

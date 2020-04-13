@@ -31,8 +31,6 @@ public class Grammar {
             }// END SWITCH
             
             
-            
-            
         }// END OF WHILE
         
         // ERROR PROCESSING
@@ -47,22 +45,22 @@ public class Grammar {
                 System.out.println("Error no program name found");
                 break;
             case -103:
-                System.out.println("Error reserved word");
+                System.out.println("Error reserved word begin");
                 break;
             case -104:
-                System.out.println("Error semi colon");
+                System.out.println("Error reserved word int");
                 break;
             case -105:
-                System.out.println("Error assignment token");
+                System.out.println("Error reserved word if");
                 break;
             case -106:
-                System.out.println("Error is number");
+                System.out.println("Error semicolon token");
                 break;
             case -107:
-                System.out.println("Error ");
+                System.out.println("Error assignment token");
                 break;
             case -108:
-                System.out.println("Error ");
+                System.out.println("Error number token");
                 break;
             default:
                 
@@ -72,30 +70,29 @@ public class Grammar {
         
     }
 
+    
+
     // FIRST LINE OF PROGRAM
     private int process_program_statement() {
-        // NOT FOUND STATEMENTS
+            // NOT FOUND STATEMENTS
         if(!is_program(0))
             return -101;// TOKEN PROGRAM
         if(!is_identifier(1))
             return -102;// TOKEN IDENTIFIER
-        if(!is_reserved_words(0))
-            return -103;// TOKEN RESERVED WORD
+        if(!is_reserved_words_begin(0))
+            return -103;// TOKEN RESERVED WORD BEGIN
+        if(!is_reserved_words_int(0))
+            return -104;// TOKEN RESERVED WORD INT
+        if(!is_reserved_words_if(0))
+            return -105;// TOKEN RESERVED WORD IF
         if(!is_semicolon(0))
-            return -104;// TOKEN SEMI COLON
+            return -106;// TOKEN SEMI COLON
         if(!is_assignment_token(0))
-            return -105;// TOKEN ASSIGNMENT SYMBOL
+            return -107;// TOKEN ASSIGNMENT SYMBOL
         if(!is_number(0))
-            return -106;// TOKEN NUMBER
+            return -108;// TOKEN NUMBER
         
         return 1000;
-    }
-
-    private boolean is_program(int min_whitespace) {
-        if(!is_whitespace(min_whitespace))// MISSING WHITESPACE
-            return false;
-        return is_program_found();
-        
     }
 
     
@@ -103,7 +100,7 @@ public class Grammar {
     private boolean is_whitespace(int min_whitespace) {
         if(index >= Token.list.size())
             return false;
-        // IF THERE IS A WHITESPACE
+        // IF THERE IS A WHITESPACE        
         if(min_whitespace > 0){
             if(Token.list.get(index).type != TType.white_space){
                 return false;
@@ -116,6 +113,12 @@ public class Grammar {
         return true;
     }
 
+    private boolean is_program(int min_whitespace) {
+        if(!is_whitespace(min_whitespace))// MISSING WHITESPACE
+            return false;
+        return is_program_found();
+        
+    }
     private boolean is_program_found() {
         if(index >= Token.list.size())
             return false;
@@ -131,7 +134,6 @@ public class Grammar {
                 return false;
             return is_identifier_found();
         }
-
     private boolean is_identifier_found() {
         if(index >= Token.list.size())
             return false;
@@ -144,29 +146,11 @@ public class Grammar {
         return false;
     }
 
-    private boolean is_reserved_words(int min_whitespace) {
-        if(!is_whitespace(min_whitespace))// MISSING WHITESPACE
-            return false;
-        return is_reserved_words_found();
-    }
-
-    private boolean is_reserved_words_found() {
-        // IF LIST SIZE IS SMALLER THAN INDEX
-        if(index >= Token.list.size())
-            return false;
-        if(Token.list.get(index).type == TType.reservedWords){
-            index++;
-            return true;
-        }
-        return false;
-    }
-
     private boolean is_assignment_token(int min_whitespace) {
         if(!is_whitespace(min_whitespace))// MISSING WHITESPACE
                 return false;
             return is_assignment_token_found();
     }
-
     private boolean is_assignment_token_found() {
         // IF LIST SIZE IS SMALLER THAN INDEX
         if(index >= Token.list.size())
@@ -184,7 +168,6 @@ public class Grammar {
                 return false;
             return is_number_found();    
     }
-
     private boolean is_number_found() {
         // IF LIST SIZE IS SMALLER THAN INDEX
         if(index >= Token.list.size())
@@ -197,10 +180,31 @@ public class Grammar {
         return false;
     }
 
-    private boolean is_semicolon(int i) {
+    
+    private boolean is_reserved_words_begin(int min_whitespace) {
+        if(!is_whitespace(min_whitespace))// MISSING WHITESPACE
+            return false;
+        return is_reserved_words_begin_found();
+    }
+    private boolean is_reserved_words_begin_found() {
+        // IF LIST SIZE IS SMALLER THAN INDEX
+        if(index >= Token.list.size())
+            return false;
+        
+        if(Token.list.get(index).text.equals("BEGIN") && Token.list.get(index).type == TType.reservedWords){
+            index++;
+            return true;
+        }
+        return false;
+    }
+
+    private boolean is_reserved_words_int(int i) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    private boolean is_semicolon(int i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 }
 
