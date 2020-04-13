@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
  *
  * @author Matthew Fischer
  */
-public class Parser2 {
+public class Par1Prac {
     
     StringTokenizer doubleTokenizer;
     

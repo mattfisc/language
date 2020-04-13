@@ -1,0 +1,23 @@
+PROGRAM matt
+BEGIN
+// Begining of the program
+int x =        22 + 10;
+double y=3.4;
+if(x>y)// if x is greater than
+	y = 8*(5+1)/2;
+else
+	y = y + (x * 4);
+x = x * (x + y);
+int z = x / x /x;
+
+x=z;
+double c = 5.1;
+
+if(y==41){
+z = x + y;
+}
+else{
+c = y - x;
+}
+
+END

@@ -20,7 +20,6 @@ public class TinyJavaApp {
         ReadInput reader = new ReadInput();
         reader.reader();
         Parser parser = new Parser();
-        
         boolean success = true;
         int row = 0;
         
@@ -35,11 +34,8 @@ public class TinyJavaApp {
             row++;
         }
         // PASS TWO
-            
-        for(Token t : Token.list){
-            
-            
-        }
+        Grammar g = new Grammar();
+        g.validate_grammar();
         
 
 

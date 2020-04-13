@@ -26,6 +26,8 @@ public class Parser {
         }
 
         if(col >= line.length()){
+            Token.list.add(new Token(TType.white_space," ",row,col));
+            print_token(Token.list.peekLast()); // PRINT LAST TOKEN WHITESPACE
             return true;
         }
         // WHITE SPACE
@@ -39,10 +41,6 @@ public class Parser {
         // CHECK FOR NUMBER
         if(token == null){
             token = is_numbersCheck(line,row,col);
-        }
-        // CHECK IF RESTRICTED
-        if(token == null){
-            token = is_restricted(line,row, col);// VARIABLE NAME
         }
         // CHECK FOR RESERVED WORD
         if(token == null){
@@ -94,14 +92,10 @@ public class Parser {
         }
         
         // END OF LINE
-        if( col >= line.length() ){
+      
             // CHECK VALID STATMENT
-            System.out.println("");
-            return true;
-        }
-        else{
-            return parseLine(line,row,col);
-        }
+        return parseLine(line,row,col);
+        
 
     }// END OF PARSE LINE
     // IS A NUMBER
@@ -130,17 +124,40 @@ public class Parser {
 
     // IS A RESERVED WORD
     public Token is_reservedWord(String str, int row, int col){
-        String temp = str.substring(col);
+ 
+        int digit = 0;
+        Token t = null;
         
-        
-        String[] reserved = {"PROGRAM","BEGIN","END","if","else","int","double"};
-        for(int i = 0; i < reserved.length; i++){
-            if( str.startsWith(reserved[i], col) ){
-                return new Token(TType.reservedWords,reserved[i],row,col);
+        // FIRST CHAR OF IDENTIFIER
+        if(str.charAt(col+digit) == '_' || str.charAt(col+digit) >= 'A' && str.charAt(col+digit) <= 'Z'
+                || (str.charAt(col+digit) >= 'a' && str.charAt(col+digit) <= 'z')){
+            digit++;
+         
+            // OTHER CHAR OF IDENTIFIER
+            while( digit+col < str.length() && ((str.charAt(col+digit) >= 'A' && str.charAt(col+digit) <= 'Z') 
+                    || (str.charAt(col+digit) >= 'a' && str.charAt(col+digit) <= 'z')
+                    || str.charAt(col+digit) == '_' 
+                    || (str.charAt(col+digit) >= '0' && str.charAt(col+digit) <= '9') ) ){
+                digit++;
             }
+           
+            //IS IDENTIFIER
+            String[] reserved = {"PROGRAM","BEGIN","END","if","else","int","double"};
+            String temp = str.substring(col, col+digit);
+            for(int i = 0; i < reserved.length; i++){
+                if( temp.equals(reserved[i]))
+                    t = new Token(TType.reservedWords,reserved[i],row,col);
+
+
+
+            }
+           
         }
+        // ALL OTHER CHAR OF IDENTIFIER
+        return t;
         
-        return null;
+        
+
         
     }
     
@@ -296,24 +313,11 @@ public class Parser {
        return t;
     }
     
-    public Token is_restricted(String str,int row,int col){
-        String temp = str.substring(col);
-
-        String[] r = {"IF","ELSE","INT","DOUBLE"};
-        for(int i = 0; i < r.length; i++){
-            if( str.startsWith(r[i], col) ){
-                return new Token(TType.restricted,r[i],row,col);
-            }
-        }
-        
-        return null;
-        
-    }
     
     //PRINT TOKEN
     public void print_token(Token token){
         if(token.type != TType.comment)
-            System.out.println(token.text + "\t: " + token.type);
+            System.out.println(token.text + "\t: " + token.type );
             
         else
             System.out.println(token.text + " : " + token.type);

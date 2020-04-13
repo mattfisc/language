@@ -53,7 +53,6 @@ enum TType {
 //    
     comment,
     line,
-    restricted,
     reservedWords
     
     
