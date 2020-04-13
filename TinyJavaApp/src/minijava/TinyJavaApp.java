@@ -26,7 +26,7 @@ public class TinyJavaApp {
         // PASS ONE
         for(String line : reader.text){
             
-            System.out.println("Line : " + row + "\n====================");
+            System.out.println("\nLine : " + row + "\n====================");
             success = parser.parseLine(line,row,0);
             
             

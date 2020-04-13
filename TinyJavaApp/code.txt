@@ -1,2 +1,3 @@
-PROGRAM MATT
+PROGRAM matt
 BEGIN
+if

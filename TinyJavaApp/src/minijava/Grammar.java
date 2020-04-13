@@ -13,7 +13,6 @@ public class Grammar {
     int index = 0;
     int state = 0;
     
-    
     public void validate_grammar(){
         while(index < Token.list.size() && state >= 0 && state < 1000){
             
@@ -24,7 +23,10 @@ public class Grammar {
             
             switch(state){
                 case 0:
-                    state = process_program_statement();
+                    state = program_begins();
+                    break;
+                case 1:
+                    state = declarations();
                     break;
                 default:
                     state = -100;
@@ -48,51 +50,84 @@ public class Grammar {
                 System.out.println("Error reserved word begin");
                 break;
             case -104:
-                System.out.println("Error reserved word int");
+                System.out.println("Error reserved word end");
                 break;
-            case -105:
-                System.out.println("Error reserved word if");
-                break;
-            case -106:
-                System.out.println("Error semicolon token");
-                break;
-            case -107:
+            case -300:
+                System.out.println("Error expression");
+                break;  
+            case -302:
                 System.out.println("Error assignment token");
+                break;  
+            case -303:
+                System.out.println("Error semicolon error");
+                break;  
+            case -304:
+                System.out.println("Error identifier");
                 break;
-            case -108:
-                System.out.println("Error number token");
+            case -305:
+                System.out.println("Error int or double reserved word");
                 break;
-            default:
+            case -306:
+                System.out.println("Error illegal start declaration statement");
+                break;  
+            case -307:
+                System.out.println("Error no END reserved word");
+                break; 
+            
+            
+            default: 
                 
         }// END OF SWITCH
-        
-        
-        
+
     }
 
     
 
     // FIRST LINE OF PROGRAM
-    private int process_program_statement() {
-            // NOT FOUND STATEMENTS
+    private int program_begins() {
+            // NOT FOUND PROGRAM, NAME, BEGINING
         if(!is_program(0))
             return -101;// TOKEN PROGRAM
         if(!is_identifier(1))
             return -102;// TOKEN IDENTIFIER
         if(!is_reserved_words_begin(0))
-            return -103;// TOKEN RESERVED WORD BEGIN
-        if(!is_reserved_words_int(0))
-            return -104;// TOKEN RESERVED WORD INT
-        if(!is_reserved_words_if(0))
-            return -105;// TOKEN RESERVED WORD IF
-        if(!is_semicolon(0))
-            return -106;// TOKEN SEMI COLON
-        if(!is_assignment_token(0))
-            return -107;// TOKEN ASSIGNMENT SYMBOL
-        if(!is_number(0))
-            return -108;// TOKEN NUMBER
+            return -103;// TOKEN PROGRAM
+
         
         return 1000;
+    }
+    
+    public int declarations(){
+        
+        // TYPE DECLARATION AND TYPE DECLARATION ASSIGNMENTS
+        if(!is_int(0) && !is_double(0)){
+            if(!is_identifier(0)){
+                if(!is_assignment_token(0)){
+                    if(!is_expression(0))
+                        return -300; // EXPRESSION ERROR
+                    return -302; // ASSIGNMENT ERROR
+                }
+                else if(!is_semicolon(0))
+                    return -303; // SEMICOLON ERROR
+                return -304; // IDENTIFIER ERROR    
+            }
+            return -305;
+        }
+        // ASSIGNMENT STATEMENTS
+        else if(!is_identifier(0)){
+            if(!is_assignment_token(0)){
+                    if(!is_expression(0))
+                        return -300;
+                    return -302;
+                }
+                else if(!is_semicolon(0))
+                    return -303;
+                return -304;       
+        }
+        // END PROGRAM
+        if(!is_end(0))
+            return -307;
+        return -306; // DECLARATION GENERAL ERROR STATEMENT
     }
 
     
@@ -190,21 +225,99 @@ public class Grammar {
         // IF LIST SIZE IS SMALLER THAN INDEX
         if(index >= Token.list.size())
             return false;
-        
-        if(Token.list.get(index).text.equals("BEGIN") && Token.list.get(index).type == TType.reservedWords){
+        if(Token.list.get(index).text.equals("BEGIN")){
             index++;
             return true;
         }
         return false;
     }
 
-    private boolean is_reserved_words_int(int i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private boolean is_reserved_words_int(int min_whitespace) {
+        if(!is_whitespace(min_whitespace))// MISSING WHITESPACE
+            return false;
+        return is_reserved_words_int_found();
+    }
+    private boolean is_reserved_words_int_found() {
+        // IF LIST SIZE IS SMALLER THAN INDEX
+        if(index >= Token.list.size())
+            return false;
+        System.out.println("are you here");
+        if(Token.list.get(index).text.equals("int") && Token.list.get(index).type == TType.reservedWords){
+            index++;
+            return true;
+        }
+        return false;
     }
 
-    private boolean is_semicolon(int i) {
+    private boolean is_reserved_words_if(int min_whitespace) {
+        if(!is_whitespace(min_whitespace))// MISSING WHITESPACE
+            return false;
+        return is_reserved_words_if_found();
+    }
+    private boolean is_reserved_words_if_found() {
+        // IF LIST SIZE IS SMALLER THAN INDEX
+        if(index >= Token.list.size())
+            return false;
+        if(Token.list.get(index).text.equals("if") && Token.list.get(index).type == TType.reservedWords){
+            index++;
+            return true;
+        }
+        return false;
+    }
+
+    
+    private boolean is_semicolon(int min_whitespace) {
+        if(!is_whitespace(min_whitespace))// MISSING WHITESPACE
+            return false;
+        return is_reserved_words_semicolon_found();
+    }
+    private boolean is_reserved_words_semicolon_found() {
+        // IF LIST SIZE IS SMALLER THAN INDEX
+        if(index >= Token.list.size())
+            return false;
+        System.out.println(Token.list.get(index).text);
+        if(Token.list.get(index).text.equals(";")&& Token.list.get(index).type == TType.line_terminator){
+            index++;
+            return true;
+        }
+        return false;
+    }
+
+    private boolean is_reserved_words_end(int min_whitespace) {
+        if(!is_whitespace(min_whitespace))// MISSING WHITESPACE
+            return false;
+        return is_reserved_words_if_found();
+    }
+    private boolean is_reserved_words_end_found() {
+        // IF LIST SIZE IS SMALLER THAN INDEX
+        if(index >= Token.list.size())
+            return false;
+        if(Token.list.get(index).text.equals("if") && Token.list.get(index).type == TType.reservedWords){
+            index++;
+            return true;
+        }
+        return false;
+    }
+
+    private boolean is_int(int i) {
+        return true;
+    }
+    private boolean is_double(int i) {
+        return true;    
+    }
+    private boolean add_symbol(int i) {
+        return true;    
+    }
+    private boolean is_expression(int i) {
+        return true;
+    }
+
+    private boolean is_end(int i) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+
+    
 
 }
 
