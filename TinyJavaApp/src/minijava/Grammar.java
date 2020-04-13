@@ -85,14 +85,19 @@ public class Grammar {
 
     // FIRST LINE OF PROGRAM
     private int program_begins() {
-            // NOT FOUND PROGRAM, NAME, BEGINING
+        
+            //HAS TO BE IN A ROW
+            
         if(!is_program(0))
             return -101;// TOKEN PROGRAM
         if(!is_identifier(1))
             return -102;// TOKEN IDENTIFIER
         if(!is_reserved_words_begin(0))
             return -103;// TOKEN PROGRAM
-
+        if(!is_reserved_words_end(0))
+            return -307;
+        // all possible options next
+        // if, int, double, identifier, end
         
         return 1000;
     }
@@ -125,7 +130,7 @@ public class Grammar {
                 return -304;       
         }
         // END PROGRAM
-        if(!is_end(0))
+        if(!is_reserved_words_end(0))
             return -307;
         return -306; // DECLARATION GENERAL ERROR STATEMENT
     }
@@ -258,6 +263,7 @@ public class Grammar {
         // IF LIST SIZE IS SMALLER THAN INDEX
         if(index >= Token.list.size())
             return false;
+  
         if(Token.list.get(index).text.equals("if") && Token.list.get(index).type == TType.reservedWords){
             index++;
             return true;
@@ -286,13 +292,13 @@ public class Grammar {
     private boolean is_reserved_words_end(int min_whitespace) {
         if(!is_whitespace(min_whitespace))// MISSING WHITESPACE
             return false;
-        return is_reserved_words_if_found();
+        return is_reserved_words_end_found();
     }
     private boolean is_reserved_words_end_found() {
         // IF LIST SIZE IS SMALLER THAN INDEX
         if(index >= Token.list.size())
             return false;
-        if(Token.list.get(index).text.equals("if") && Token.list.get(index).type == TType.reservedWords){
+        if(Token.list.get(index).text.equals("END") && Token.list.get(index).type == TType.reservedWords){
             index++;
             return true;
         }
@@ -312,9 +318,7 @@ public class Grammar {
         return true;
     }
 
-    private boolean is_end(int i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
     
 
     
