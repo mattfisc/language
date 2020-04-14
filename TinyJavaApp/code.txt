@@ -1,4 +1,5 @@
 PROGRAM matt
 BEGIN
-if(5){int x=1;}
+if(5)
+int x;
 END

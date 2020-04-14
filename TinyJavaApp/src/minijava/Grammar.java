@@ -59,41 +59,59 @@ public class Grammar {
  
             switch(state){
                 case -100:
-                    System.out.println("Error in process program statement method");
+                    System.out.println(" Process program statement method");
                     break;
                 case -101:
-                    System.out.println("Error no program found");
+                    System.out.println("No program found");
                     break;
                 case -102:
-                    System.out.println("Error no program name found");
+                    System.out.println("No program name found");
                     break;
                 case -103:
-                    System.out.println("Error reserved word begin");
+                    System.out.println("Reserved word begin");
                     break;
                 case -104:
-                    System.out.println("Error reserved word end");
+                    System.out.println("Reserved word end");
                     break;
-    //            case -300:
-    //                System.out.println("Error expression");
-    //                break;  
-    //            case -302:
-    //                System.out.println("Error assignment token");
-    //                break;  
-    //            case -303:
-    //                System.out.println("Error semicolon error");
-    //                break;  
-    //            case -304:
-    //                System.out.println("Error identifier");
-    //                break;
-    //            case -305:
-    //                System.out.println("Error int or double reserved word");
-    //                break;
-    //            case -306:
-    //                System.out.println("Error illegal start declaration statement");
-    //                break;  
-    //            case -307:
-    //                System.out.println("Error no END reserved word");
-    //                break; 
+                case -106:
+                    System.out.println("End '}' for statment end");
+                    break;
+                case -301:
+                    System.out.println("no int or double found for type declaration");
+                    break;  
+                case -302:
+                    System.out.println("no identifier found for type declaration");
+                    break;  
+                case -303:
+                    System.out.println("no semicolon found for type declaration");
+                    break;  
+                case -304:
+                    System.out.println("general declaration type");
+                    break;
+                case -401:
+                    System.out.println("no 'if' word in if statement");
+                    break;  
+                case -402:
+                    System.out.println("no '(' found  in if statement");
+                    break;  
+                case -403:
+                    System.out.println("no ')' found  in if statement");
+                    break;
+                case -404:
+                    System.out.println("no '}' found  in if statement");
+                    break;
+                case -405:
+                    System.out.println("no 'else' found in if statement");
+                    break;  
+                case -450:
+                    System.out.println("no identifier on assignment statement");
+                    break;
+                case -451:
+                    System.out.println("no '=' found on assignment statemen");
+                    break;
+                case -452:
+                    System.out.println("no '; found on assignment statemen");
+                    break;  
 
 
                 default: 
@@ -163,7 +181,7 @@ public class Grammar {
         // RETURN VALIDATE ASSIGNMENT STATEMENT
         if(t.type == TType.identifier )
             return validate_assignment_statement();
-                
+        
         is_whitespace(0);// STRIP WHITESPACE
         
         return -200;
@@ -180,6 +198,7 @@ public class Grammar {
     public int find_statements_that_end_closing_brace(){
         if(index >= Token.list.size())
             return -106;
+        is_whitespace(0);// STRIP WHITESPACE
         while(TType.block != Token.list.get(index).type || !Token.list.get(index).text.equals("}")){
             state = validate_statement();
         }
@@ -376,48 +395,38 @@ public class Grammar {
         return false;
     }
 
-    private boolean is_int(int i) {
-        return true;
-    }
-    private boolean is_double(int i) {
-        return true;    
-    }
-    private boolean add_symbol(int i) {
-        return true;    
-    }
-    private boolean is_expression(int i) {
-        return true;
-    }
-
     private int validate_if_statement() {
         // REMOVE WHITESPACE
-        is_whitespace(0);
-        
         // IF TOKEN IS NOT "IF"
         // RETURN ERROR
+        is_whitespace(0);
         if(Token.list.get(index).type != TType.reservedWords 
                 || !Token.list.get(index).text.equals("if"))
             return -401;
-        is_whitespace(0);
+        index++;
+        
         //IF TOKEN IS NOT (
         // RETURN ERROR
+        is_whitespace(0);
         if(Token.list.get(index).type != TType.parenthesis 
                 || !Token.list.get(index).text.equals("("))
             return -402;
-        is_whitespace(0);
+        index++;
         
         // RELATIONAL EXPRESSION METHOD
+        is_whitespace(0);
         state = relational_expression();
         if(state < 0)
             return state;
-        is_whitespace(0);
+        
         
         // IF TOKEN IS NOT )
         // RETURN ERROR
+        is_whitespace(0);
         if(Token.list.get(index).type != TType.parenthesis 
                 || !Token.list.get(index).text.equals(")"))
             return -403;
-        
+        index++;
         
         // IF TOKEN IS {
         // VALIDATE STATEMENTS
@@ -426,6 +435,7 @@ public class Grammar {
         is_whitespace(0);
         if(Token.list.get(index).type == TType.block 
                 && Token.list.get(index).text.equals("{")){
+            index++;
             state = find_statements_that_end_closing_brace();
             if(state < 0)
                 return state;
@@ -442,7 +452,7 @@ public class Grammar {
                 if(state < 0)
                     return state;
         }
-        
+        index++;
         
         // OPTION ELSE TOKEN
         // IF TOKEN IS {
@@ -482,35 +492,37 @@ public class Grammar {
         return validate_type_statement("double"); 
     }
     private int validate_type_statement(String type) {
-        
-        is_whitespace(0);
+
         // IF TOKEN IS NOT INT/DOUBLE
         // RETURN ERROR
+        is_whitespace(0);
         if(Token.list.get(index).type != TType.reservedWords 
                 || !Token.list.get(index).text.equals(type))
             return -301;
         index++;
         if(!is_whitespace(1))
-            return -305;
+            return -302;
         
         //IF TOKEN IS NOT AN IDENTIFIER
         // RETURN ERROR
         if(Token.list.get(index).type != TType.identifier)
-            return -302;
+            return -303;
         index++;
-        is_whitespace(0);
+        
         
         //IF TOKEN IS ;
         // INCREMENT INDEX AND RETURN VALID
+        is_whitespace(0);
         if(Token.list.get(index).type == TType.line_terminator 
                 && Token.list.get(index).text.equals(";")){
             index++;
             return state;
         }
             
-        is_whitespace(0);
+        
         // IF TOKEN IS =
         // STATE = ARTHIMETIC EXPRESSION METHOD
+        is_whitespace(0);
         if(Token.list.get(index).type == TType.assignment_token 
                 && Token.list.get(index).text.equals("=")){
             index++;
@@ -518,52 +530,59 @@ public class Grammar {
         }
         
         
-        is_whitespace(0);
+        
         
         //IF TOKEN IS ;
         // INCREMENT INDEX AND RETURN VALID
+        is_whitespace(0);
         if(Token.list.get(index).type == TType.line_terminator 
                 && Token.list.get(index).text.equals(";")){
             index++;
             return state;
         }
            
-        return -300; // DEFAULT ERROR INT STATEMENT
+        return -304; // DEFAULT ERROR INT STATEMENT
     }
 
     private int validate_assignment_statement() {
-        is_whitespace(0);
+        
         //IF TOKEN IS NOT AN IDENTIFIER
         // RETURN ERROR
-        if(Token.list.get(index).type != TType.identifier)
-            return -301;
-        index++;
         is_whitespace(0);
+        if(Token.list.get(index).type != TType.identifier)
+            return -450;
+        index++;
+        
         
 
         // IF TOKEN IS =
         // STATE = ARTHIMETIC EXPRESSION METHOD
+        is_whitespace(0);
         if(Token.list.get(index).type == TType.assignment_token 
                 && Token.list.get(index).text.equals("=")){
             index++;
             state = arthimetic_expression();
         }
+        else
+            return -451;
         
         
-        is_whitespace(0);
+        
         
         //IF TOKEN IS ;
         // INCREMENT INDEX AND RETURN VALID
+        is_whitespace(0);
         if(Token.list.get(index).type == TType.line_terminator 
                 && Token.list.get(index).text.equals(";")){
             index++;
             return state;
         }
            
-        return -400; // DEFAULT ERROR INT STATEMENT
+        return -453; // END ASSIGNMENT STATEMENT
     }
 
     private int arthimetic_expression() {
+        is_whitespace(0);
         if(Token.list.get(index).type != TType.number)
             state = -600;
         index++;
@@ -571,6 +590,7 @@ public class Grammar {
     }
 
     private int relational_expression() {
+        is_whitespace(0);
         if(Token.list.get(index).type != TType.number)
             state = -600;
         index++;
