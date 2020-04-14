@@ -103,23 +103,44 @@ public class Parser {
         int digit = 0;
         String numbers = "";
         Token t = null;
-        
+        boolean found_dot = false;
         // IS CHAR A NUMBER
         // FIRST CHAR IS NUMBER
-        if(str.charAt(col) >= '0' && str.charAt(col) <= '9'){
-            numbers = numbers + str.charAt(col);
-            // MORE THAN ONE DIGIT NUMBER
+        if(str.charAt(col) >= '0' && str.charAt(col) <= '9' || str.charAt(col) == '.'){
+            numbers += str.charAt(col);
             
+            // MORE THAN ONE DIGIT NUMBER
             digit++;
-            while(digit+col < str.length() && str.charAt(col+digit) >= '0' && str.charAt(col+digit) <= '9'){
+            
+            while(digit+col < str.length() && 
+                    ((str.charAt(col+digit) >= '0' && str.charAt(col+digit) <= '9') 
+                    || (str.charAt(col+digit) == '.' && !found_dot))){
                 numbers = numbers + str.charAt(col+digit);
                 digit++;
             }
 
-            t = new Token(TType.number,numbers,row,col);   
-            //is_double(col);
+            t = new Token(TType.number,numbers,row,col);
+            
+            
         }// END OF NUMBER   
         return t;
+    }
+    // CHECK DOUBLE OR INTEGER
+    public boolean is_double(String str){
+        boolean is_double = false;
+        for(int i = 0; i < str.length(); i++){
+            // CONTAINS ONE DECIMAL POINT
+            if(str.charAt(i) == '.' && is_double == false){
+                is_double = true;
+            }
+            // CONTAINS TWO DECIMAL POINT
+            if(str.charAt(i) == '.' && is_double == true){
+                is_double = false;
+                break;
+            }
+                
+        }
+        return is_double;
     }
 
     // IS A RESERVED WORD
@@ -187,21 +208,7 @@ public class Parser {
         return t;
     }
     
-    // CHECK DOUBLE OR INTEGER
-    public boolean is_double(String value){
-        boolean is_double = false;
-        
-        for(int i = 0; i < value.length(); i++){
-            // CONTAINS ONE DECIMAL POINT
-            if(value.charAt(i) == '.'){
-                // DOES NOT CONATAIN TWO DECIMAL POINTS
-                if(!value.substring(i+1).contains("."))
-                    return is_double;
-            }
-                
-        }
-        return is_double;
-    }
+   
     
     // ARITHMETIC OPERATORS
     public Token is_arithmetic_operators(String str,int row,int col){
@@ -230,9 +237,10 @@ public class Parser {
         Token t = null;
         String[] logical ={"&&","||"};
         for(int i = 0; i < logical.length; i++){
-            if( str.startsWith(logical[i], col) ){
+            if( str.charAt(col) == '&' && str.charAt(col+1) == '&')
                 return new Token(TType.logical_operator,logical[i],row,col);
-            }
+            else if( str.charAt(col) == '&' && str.charAt(col+1) == '&')
+                return new Token(TType.logical_operator,logical[i],row,col);
         }
        return t;
     }
@@ -247,7 +255,7 @@ public class Parser {
     // IS ASSIGNMENT OPERATOR
     public Token is_comment(String str,int row,int col){
         Token t = null;
-        if(str.length()-col > 3 && str.substring(col, col+2).equals("//"))
+        if(str.length()-col > 1 && str.charAt(col+1) == '/' && str.charAt(col+2) == '/' )
             t = new Token(TType.comment,str.substring(col),row,col);
             
        return t;
@@ -324,27 +332,5 @@ public class Parser {
 
     }
     
-    // CHECK ALL NUMBERS IF DOUBLE
-//    public void is_double(int index){
-//        if(Token.list.size() > 1){
-//            if(Token.list.get(index).type == TType.number){
-//                // IF DOUBLE AND SIZE IS BIGGER THAN 2
-//
-//                if(Token.list.get(index-1).type == TType.decimal 
-//                    && Token.list.get(index-2).type == TType.number){
-//                    // EDIT TOKEN TYPE
-//                    Token.list.get(index-2).type = TType.doubleN;
-//                    //EDIT TOKEN TEXT
-//                    Token.list.get(index-2).text = Token.list.get(index-2).text 
-//                            + Token.list.get(index-1).text + Token.list.get(index);
-//                    Token.list.remove(index-1);
-//                    Token.list.remove(index);     
-//                }
-//            }
-//            
-//        }
-//    }
-//    public void is_statement(){
-//        
-//    }
+
 }

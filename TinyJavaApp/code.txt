@@ -1,3 +1,4 @@
 PROGRAM matt
 BEGIN
+if(5){int x=1;}
 END
