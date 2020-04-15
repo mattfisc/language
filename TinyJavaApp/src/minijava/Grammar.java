@@ -9,6 +9,12 @@ package minijava;
  * @author Matthew Fischer
  */
 public class Grammar {
+    // BUILD SYMBOL
+    Token identifierType = null;
+    Token identifier = null;
+    Token value = null;
+    
+    
     int depth = 0;
     int index = 0;
     int state = 0;
@@ -494,6 +500,8 @@ public class Grammar {
         if(Token.list.get(index).type != TType.reservedWords 
                 || !Token.list.get(index).text.equals(type))
             return -301;
+        // is identifier type-------------------------------------
+        add_symbol_identifierType();
         index++;
         
         // WHITE SPACE REQUIRED AFTER 'INT'
@@ -505,6 +513,9 @@ public class Grammar {
         
         if(Token.list.get(index).type != TType.identifier)
             return -303;
+        
+        
+        // GO TO NEXT TOKEN
         index++;
         
         
@@ -513,6 +524,16 @@ public class Grammar {
         is_whitespace(0);
         if(Token.list.get(index).type == TType.line_terminator 
                 && Token.list.get(index).text.equals(";")){
+            
+            // VALID STATEMENT
+            // ADD SYMBOL
+            state = add_symbol_identifier();
+            if(state < 0)
+                return -998;
+
+        
+            
+            
             index++;
             return state;
         }
@@ -524,6 +545,9 @@ public class Grammar {
                 && Token.list.get(index).text.equals("=")){
             index++;
             state = arthimetic_expression();// NEEDS WHITE SPACE
+            
+            //------------------------
+            
         }
         
         
@@ -534,6 +558,7 @@ public class Grammar {
         is_whitespace(0);
         if(Token.list.get(index).type == TType.line_terminator 
                 && Token.list.get(index).text.equals(";")){
+
             index++;
             return state;
         }
@@ -711,6 +736,51 @@ public class Grammar {
             index++;
         return arthimetic_expression();
     }
+ 
+    
+    
+    //------------------------------------------------------------
+    public void add_symbol_identifierType(){// line 510 in code
+        identifierType = Token.list.get(index);
+    }
+    public int add_symbol_identifier(){// line 510 in code
+        identifier = Token.list.get(index-1);
+        
+        Symbol s = new Symbol(identifier.text,identifierType.text);
+        
+        if(Symbol.list.contains(s))
+            return -999;
+        
+        Symbol.list.add(s);
+        return state;// Symbol added
+    }
+    public int add_symbol_value(){
+        Token value = Token.list.get(index-1);
+        // is integer or double
+        int is_int = 0;
+        double is_double = 0;
+        
+        if(value.text.contains("."))
+            is_double = Double.parseDouble(value.text);
+        else
+            is_int = Integer.parseInt(value.text);
+        
+        // IF ERROR OCCURRED THIS WONT HAPPEN
+        // ALWAYS LAST
+        Symbol s = Symbol.list.getLast();
+        
+        if(is_double > 0){
+            s.dValue = is_double;
+            return state;// Symbol added
+        }
+        else if(is_int > 0){
+            s.iValue = is_int;
+            return state;
+        }
+        else
+            return -997;
+    }
+    
     
 }
 

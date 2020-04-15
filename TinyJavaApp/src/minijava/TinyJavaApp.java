@@ -37,7 +37,10 @@ public class TinyJavaApp {
         Grammar g = new Grammar();
         g.validate_grammar();
         
-
+        System.out.println("symbol size " + Symbol.list.size());
+        for(int i =0; i < Symbol.list.size();i++){
+            System.out.println("Symbol " + Symbol.list.get(i).identifierType);
+        }
 
     }
 
