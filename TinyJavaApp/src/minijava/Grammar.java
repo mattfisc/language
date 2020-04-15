@@ -5,11 +5,11 @@
 package minijava;
 
 /**
- *
+ *WHITE SPACE 213
  * @author Matthew Fischer
  */
 public class Grammar {
-    
+    int depth = 0;
     int index = 0;
     int state = 0;
     
@@ -76,23 +76,26 @@ public class Grammar {
                 case -106:
                     System.out.println("End '}' for statment end");
                     break;
+                case -200:
+                    System.out.println("statement start no if, int, double");
+                    break;
                 case -301:
                     System.out.println("no int or double found for type declaration");
                     break;  
                 case -302:
-                    System.out.println("no identifier found for type declaration");
+                    System.out.println("no space between int and identifier for type declaration");
                     break;  
                 case -303:
-                    System.out.println("no semicolon found for type declaration");
+                    System.out.println("missing identifier for type declaration");
                     break;  
                 case -304:
-                    System.out.println("general declaration type");
+                    System.out.println("missing semicolon for type declaration assignment statement");
                     break;
                 case -401:
-                    System.out.println("no 'if' word in if statement");
+                    System.out.println("missing 'if' word in if statement");
                     break;  
                 case -402:
-                    System.out.println("no '(' found  in if statement");
+                    System.out.println("missing '(' found  in if statement");
                     break;  
                 case -403:
                     System.out.println("no ')' found  in if statement");
@@ -107,10 +110,10 @@ public class Grammar {
                     System.out.println("no identifier on assignment statement");
                     break;
                 case -451:
-                    System.out.println("no '=' found on assignment statemen");
+                    System.out.println("no '=' found on assignment statement");
                     break;
                 case -452:
-                    System.out.println("no '; found on assignment statemen");
+                    System.out.println("no '; found on assignment statement");
                     break;  
 
 
@@ -145,26 +148,13 @@ public class Grammar {
             return -104;
         return 1000;
     }
-//    private int validate_statements(){
-//        Token t = Token.list.get(index);
-//        
-//        while((!t.text.equals("END") || t.type != TType.reservedWords) 
-//                && (!t.text.equals("}") || t.type != TType.block)){
-//            state = validate_statement();
-//            if(state < 0)
-//                break;
-//            t = Token.list.get(++index);
-//        }
-//
-//        return state;
-//    }
+
     private int validate_statement() {
         is_whitespace(0);// STRIP WHITESPACE
-        
         Token t = Token.list.get(index);
-        
-        // RESERVED WORDS INT DOUBLE IF IDENTIFIER
-        
+
+        // RESERVED WORDS INT, DOUBLE, IF, IDENTIFIER
+
         // IF TOKEN IS IF
         // RETURN validate_if_statement();
         if(t.type == TType.reservedWords && t.text.equals("if"))
@@ -187,11 +177,11 @@ public class Grammar {
         return -200;
     }
     public int find_statements_that_end_with_end(){
-        while(index < Token.list.size()){
+        while(index < Token.list.size() && state > 0){// i add this state ------------------------
             is_whitespace(0);// STRIP WHITESPACE
             if(TType.reservedWords == Token.list.get(index).type && Token.list.get(index).text.equals("END"))
                 return 3;
-            state = validate_statement();
+            return validate_statement();// ---------------------------------i did this --------------------------------  
         }
         return state;
     }
@@ -208,11 +198,13 @@ public class Grammar {
     
     // IS WHITESPACE
     private boolean is_whitespace(int min_whitespace) {
-        if(index >= Token.list.size())
+        // END OF TOKEN LIST
+        if(index >= Token.list.size() || state < 0)
             return false;
         
+ 
         
-        // IF THERE IS A WHITESPACE        
+        // IF THERE IS A WHITESPACE OR LINE       
         if(min_whitespace > 0){
             if(Token.list.get(index).type == TType.line){
                     System.out.println(Token.list.get(index).text);
@@ -242,8 +234,9 @@ public class Grammar {
     }
 
     private boolean is_program(int min_whitespace) {
-        if(!is_whitespace(min_whitespace))// MISSING WHITESPACE
-            return false;
+//        if(!is_whitespace(min_whitespace))// MISSING WHITESPACE
+//            return false;
+        is_whitespace(0);
         return is_program_found();
         
     }
@@ -399,7 +392,9 @@ public class Grammar {
         // REMOVE WHITESPACE
         // IF TOKEN IS NOT "IF"
         // RETURN ERROR
+        
         is_whitespace(0);
+        
         if(Token.list.get(index).type != TType.reservedWords 
                 || !Token.list.get(index).text.equals("if"))
             return -401;
@@ -500,11 +495,14 @@ public class Grammar {
                 || !Token.list.get(index).text.equals(type))
             return -301;
         index++;
+        
+        // WHITE SPACE REQUIRED AFTER 'INT'
         if(!is_whitespace(1))
             return -302;
         
         //IF TOKEN IS NOT AN IDENTIFIER
         // RETURN ERROR
+        
         if(Token.list.get(index).type != TType.identifier)
             return -303;
         index++;
@@ -518,7 +516,6 @@ public class Grammar {
             index++;
             return state;
         }
-            
         
         // IF TOKEN IS =
         // STATE = ARTHIMETIC EXPRESSION METHOD
@@ -541,7 +538,7 @@ public class Grammar {
             return state;
         }
            
-        return -304; // DEFAULT ERROR INT STATEMENT
+        return -304; // SEMI COLON ERROR
     }
 
     private int validate_assignment_statement() {
@@ -575,33 +572,146 @@ public class Grammar {
         if(Token.list.get(index).type == TType.line_terminator 
                 && Token.list.get(index).text.equals(";")){
             index++;
-            return state;
+            return find_statements_that_end_with_end();
         }
            
         return -453; // END ASSIGNMENT STATEMENT
     }
 
-    private int arthimetic_expression() {
-        is_whitespace(0);
-        if(Token.list.get(index).type != TType.number)
-            state = -600;
-        index++;
-        return state;
-    }
 
     private int relational_expression() {
-        is_whitespace(0);
-        if(Token.list.get(index).type != TType.number)
-            state = -600;
-        index++;
+        //X == U
+        // 3 == 3
+        // 3 ==3 && X!=Y || 4 == Z || 4 > 3
+        // (3==3)
+        // (3 ==3 && ((X!=Y) || 3 == Z) || 4 ==F)
+        if(!is_relational())
+            return -750;
         return state;
+        
+    }
+    public boolean is_num_or_identifier(){
+        is_whitespace(0);
+        
+        return (Token.list.get(index).type == TType.number 
+                || Token.list.get(index).type == TType.identifier);
+   
+    }
+    public boolean is_relational(){
+        // IS NUMBER OR IDENTIFIER  (x==u)
+        is_whitespace(0);
+        
+        // TERMINATION
+        // WHEN RIGHT PAREN, INCREMENT, RETURN TRUE
+        if(Token.list.get(index).type == TType.parenthesis && Token.list.get(index).text.equals(")")){
+            if(depth <= 0)
+                return true;
+            
+            index++;
+            depth--;
+            return true;
+            
+        }
+        is_whitespace(0);
+        // if LEFT PAREN, increment, return is_relational()
+        if(Token.list.get(index).type == TType.parenthesis && Token.list.get(index).text.equals("(")){
+            depth++;
+            index++;
+            return is_relational();
+        }
+        
+        // IF NUMBER, AND RELATIONAL OPERATOR
+        if(!is_num_or_identifier())
+            return false;
+        index++;
+        
+        is_whitespace(0);
+        if(Token.list.get(index).type != TType.relational_operator)
+            return false;
+        index++;
+
+        // if NUMBER OR IDENTIFIER
+        if(!is_num_or_identifier())
+            return false;
+        index++;
+        
+        // IF LOGICAL
+        // IF LEFT PAREN THEN INCREMENT AND RECALL
+        // IF RELATIONAL EXPRESSION
+        return is_optional_logic_with_relational_expression();
+
+    }
+    
+    public boolean is_optional_logic_with_relational_expression(){
+        
+        // OPTIONAL RECURRSION
+        is_whitespace(0);
+        if(Token.list.get(index).type == TType.logical_operator)
+            index++;
+       
+
+        // ALL IS VALID AND DONE
+        return is_relational();
     }
 
-    
-    
+    private int arthimetic_expression() {
+        // 1+1*7/5*3-9;
+        // (x+3)
+        // ((3+0))
+        //  X+3;
+        // (3+6*(x+3)+3)
+        // 3*33.6 / X;
+        // 3 
+        // x
+        
+        // (,NUMBER,IDENTIFIER
+        // )
+        // IS NUMBER OR IDENTIFIER
+        is_whitespace(0);
+       
+        // TERMINATION
+        // WHEN RIGHT PAREN, INCREMENT, RETURN TRUE
+        if(Token.list.get(index).type == TType.line_terminator)
+            return state;
+        if(Token.list.get(index).type == TType.parenthesis && Token.list.get(index).text.equals(")")){
+            index++;
+            
+            if(depth > 0)
+                depth--;
+               
 
+            is_whitespace(0);
+            if(Token.list.get(index).type == TType.arithmetic_operator ){
+                return optional_arithmetic_expression();
+            }
+            return (depth <=0)?state:arthimetic_expression();
+        }
+        
+        is_whitespace(0);
+        // if LEFT PAREN, increment, return is_relational()
+        if(Token.list.get(index).type == TType.parenthesis && Token.list.get(index).text.equals("(")){
+            depth++;
+            index++;
+            return arthimetic_expression();
+        }
+        
+        // IF NUMBER 
+        if(!is_num_or_identifier())
+            return -900;
+        index++;
+        
+        
+        return optional_arithmetic_expression();
+    }
     
-
+    public int optional_arithmetic_expression(){
+        
+        is_whitespace(0);
+        if(Token.list.get(index).type == TType.arithmetic_operator)
+            index++;
+        return arthimetic_expression();
+    }
+    
 }
 
    

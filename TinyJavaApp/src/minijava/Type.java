@@ -10,11 +10,7 @@ package minijava;
  */
 enum TType {
     
-//    type,
     number,
-//    letter,
-//    
-//    digit,
     integerN,
     doubleN,
     decimal,
@@ -22,19 +18,12 @@ enum TType {
     block,
     parenthesis,
     white_space,
-//    
+   
     arithmetic_operator,
     relational_operator,
     logical_operator,
-//    
-//    symbol,
-//    underline,
     line_terminator,
     assignment_token,
-//    
-//    first_char,
-//    other_char,
-//    
     identifier,
 //    
 //    type_declaration,

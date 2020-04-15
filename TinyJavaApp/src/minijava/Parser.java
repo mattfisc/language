@@ -239,7 +239,7 @@ public class Parser {
         for(int i = 0; i < logical.length; i++){
             if( str.charAt(col) == '&' && str.charAt(col+1) == '&')
                 return new Token(TType.logical_operator,logical[i],row,col);
-            else if( str.charAt(col) == '&' && str.charAt(col+1) == '&')
+            else if( str.charAt(col) == '|' && str.charAt(col+1) == '|')
                 return new Token(TType.logical_operator,logical[i],row,col);
         }
        return t;
