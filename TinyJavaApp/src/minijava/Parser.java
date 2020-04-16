@@ -21,13 +21,12 @@ public class Parser {
         
         if(col == 0){
             Token.list.add(l);
-            //Tester
-            System.out.println("Code\t: " + l.text);
+
         }
 
         if(col >= line.length()){
             Token.list.add(new Token(TType.white_space," ",row,col));
-            print_token(Token.list.peekLast()); // PRINT LAST TOKEN WHITESPACE
+            //print_token(Token.list.peekLast()); // PRINT LAST TOKEN WHITESPACE
             return true;
         }
         // WHITE SPACE
@@ -88,7 +87,7 @@ public class Parser {
         if(token != null){
             col = col + token.text.length();
             Token.list.add(token);
-            print_token(token);
+            //print_token(token);
         }
         
         // END OF LINE

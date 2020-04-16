@@ -25,20 +25,15 @@ public class TinyJavaApp {
         
         // PASS ONE
         for(String line : reader.text){
-            
-            System.out.println("\nLine : " + row + "\n====================");
             success = parser.parseLine(line,row,0);
-            
-            
-            
             row++;
         }
+        
         // PASS TWO
         Grammar g = new Grammar();
         g.validate_grammar();
         
-
-
+        
     }
 
 }

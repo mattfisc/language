@@ -9,14 +9,15 @@ package minijava;
  * @author Matthew Fischer
  */
 public class Grammar {
-    
+    Token identifierType = null;
+    Token identifier = null;
     
     int depth = 0;
     int index = 0;
     int state = 0;
     
     public void validate_grammar(){
-        System.out.println("\n\n\n---------------\nPARSING GRAMMAR\n---------------");
+        System.out.println("---------------\nPARSING GRAMMAR\n---------------");
         while(index < Token.list.size() && state >= 0 && state < 1000){
             
             switch(state){
@@ -43,8 +44,16 @@ public class Grammar {
             
         }// END OF WHILE
         
+        
+        // ERROR CHECK
         error_output();
-
+        
+        // CODE IS VALID
+        if(state == 1000){
+            System.out.println("------------\nCODE IS VALID!!!!\n------------");
+            // OUTPUT ALL SYMBOLS
+            Symbol.printSymbols();
+        }
     }
 
     public void error_output(){
@@ -126,6 +135,12 @@ public class Grammar {
                 case -900:
                     System.out.println("Missing number or identifier for arithmetic expression");
                     break;  
+                case -989:
+                    System.out.println("Symbol not initialized ");
+                    break;  
+                case -990:
+                    System.out.println("Symbol already exists");
+                    break;
                 case -999:
                     System.out.println("Variable already exists");
                     break; 
@@ -135,10 +150,8 @@ public class Grammar {
                 case -997:
                     System.out.println("Symbol");
                     break;
-
-
                 default: 
-
+                    
             }// END OF SWITCH
         }
     }
@@ -527,7 +540,9 @@ public class Grammar {
         return validate_type_statement("double"); 
     }
     private int validate_type_statement(String type) {
-
+        identifierType = null;
+        identifier = null;
+        
         // IF TOKEN IS NOT INT/DOUBLE
         // RETURN ERROR
         is_whitespace(0);
@@ -536,7 +551,7 @@ public class Grammar {
         if(Token.list.get(index).type != TType.reservedWords 
                 || !Token.list.get(index).text.equals(type))
             return -301;
-
+        identifierType = Token.list.get(index);
         index++;
         
         // WHITE SPACE REQUIRED AFTER 'INT'
@@ -545,11 +560,15 @@ public class Grammar {
         
         //IF TOKEN IS NOT AN IDENTIFIER
         // RETURN ERROR
-        
         if(Token.list.get(index).type != TType.identifier)
             return -303;
-        // if identifier in symbol table return error
-        // else add identifier to table
+        
+        // Symbol add if not exist
+        identifier = Token.list.get(index);
+        if(!Symbol.findSymbol(identifier.text))
+            Symbol.list.add(new Symbol(identifierType,identifier));
+        else
+            return -990;
         // GO TO NEXT TOKEN
         index++;
         
@@ -597,9 +616,11 @@ public class Grammar {
         //IF TOKEN IS NOT AN IDENTIFIER
         // RETURN ERROR
         is_whitespace(0);
-
         if(Token.list.get(index).type != TType.identifier)
             return -450;
+        //  IF SYMBOL ALREADY EXISTS
+        if(!Symbol.findSymbol(Token.list.get(index).text))
+            return -989;
         index++;
         
         
@@ -755,11 +776,7 @@ public class Grammar {
             index++;
         return arthimetic_expression();
     }
- 
-    
-    
 
-    
 }
 
    

@@ -15,21 +15,20 @@ import java.util.LinkedList;
 public class Symbol {
 
     public static LinkedList<Symbol> list = new LinkedList<Symbol>();
-    
-    public String identifier;
     public String identifierType;
-    public String value;
+    public String identifier;
+    public String valueStr;
     public double dValue;
     public int iValue;
 
     // CONSTRUCTOR
-    public Symbol(Token identifierType,Token identifier,Token value){
-        if(identifierType != null)
-            this.identifier = identifier.text;
-        if(identifier != null)
-            this.identifier = identifier.text;
-        if(value != null)
-            this.value = value.text;
+    public Symbol(Token identifierType,Token identifier){
+        
+        this.identifierType = identifierType.text;
+        
+        this.identifier = identifier.text;
+        
+        this.valueStr = "";
         dValue = 0.0;
         iValue = 0;
     }
@@ -38,9 +37,20 @@ public class Symbol {
     // FIND SYMBOL
     public static boolean findSymbol(String identifier){
         for(int i = 0; i < list.size(); i++){
-            if(list.get(i).identifier == identifier)
+            if(list.get(i).identifier.equals(identifier))
                 return true;
         }
         return false;
     }
+    
+    // PRINT SYMBOLS LIST
+    public static void printSymbols(){
+        System.out.println("\n------------------\n"
+                + "TYPE:\tIDENTIFIER:\n------------------");
+        for(int i = 0; i < list.size(); i++){
+            System.out.println(list.get(i).identifierType +"\t"+ list.get(i).identifier);
+        }
+    }
+    
+    
 }

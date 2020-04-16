@@ -9,7 +9,6 @@ package minijava;
  * @author Matthew Fischer
  */
 enum TType {
-    
     number,
     integerN,
     doubleN,
@@ -27,7 +26,5 @@ enum TType {
     comment,
     line,
     reservedWords
-    
-    
 }
 
