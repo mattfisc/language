@@ -18,29 +18,22 @@ public class Symbol {
     
     public String identifier;
     public String identifierType;
-    
+    public String value;
     public double dValue;
     public int iValue;
 
     // CONSTRUCTOR
-    public Symbol(String identifier,String type){
-        this.identifier = identifier;
-        this.identifierType = type;
+    public Symbol(Token identifierType,Token identifier,Token value){
+        if(identifierType != null)
+            this.identifier = identifier.text;
+        if(identifier != null)
+            this.identifier = identifier.text;
+        if(value != null)
+            this.value = value.text;
         dValue = 0.0;
         iValue = 0;
     }
-    public Symbol(String identifier,String type,double dValue){
-        this.identifier = identifier;
-        this.identifierType = type;
-        this.dValue = dValue;
-        iValue = 0;
-    }
-    public Symbol(String identifier,String type,int iValue){
-        this.identifier = identifier;
-        this.identifierType = type;
-        dValue = 0.0;
-        this.iValue = iValue;
-    }
+    
     
     // FIND SYMBOL
     public static boolean findSymbol(String identifier){

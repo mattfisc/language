@@ -16,7 +16,6 @@ public class Token {
     
     public TType type;
     public String text;
-    
     public int row;// TOKEN ROW
     public int col;//  TOKEN COL
     

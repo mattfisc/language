@@ -9,10 +9,6 @@ package minijava;
  * @author Matthew Fischer
  */
 public class Grammar {
-    // BUILD SYMBOL
-    Token identifierType = null;
-    Token identifier = null;
-    Token value = null;
     
     
     int depth = 0;
@@ -20,7 +16,7 @@ public class Grammar {
     int state = 0;
     
     public void validate_grammar(){
-        System.out.println("---------------\nPARSING GRAMMAR\n---------------");
+        System.out.println("\n\n\n---------------\nPARSING GRAMMAR\n---------------");
         while(index < Token.list.size() && state >= 0 && state < 1000){
             
             switch(state){
@@ -61,7 +57,7 @@ public class Grammar {
             }
             
             System.out.println(str + "^");
-            System.out.print("Error : line " + (t.row+1) + " at col " + (t.col+1) + ", " + state+ " ");
+            System.out.println("Error "+ state+ " : line " + (t.row+1) + " at col " + (t.col+1) );
  
             switch(state){
                 case -100:
@@ -71,56 +67,74 @@ public class Grammar {
                     System.out.println("No program found");
                     break;
                 case -102:
-                    System.out.println("No program name found");
+                    System.out.println("Missing program name");
                     break;
                 case -103:
-                    System.out.println("Reserved word begin");
+                    System.out.println("Missing 'BEGIN'");
                     break;
                 case -104:
-                    System.out.println("Reserved word end");
+                    System.out.println("Missing 'end'");
                     break;
                 case -106:
-                    System.out.println("End '}' for statment end");
+                    System.out.println("Missing '}' end of block");
                     break;
                 case -200:
-                    System.out.println("statement start no if, int, double");
+                    System.out.println("Missing 'if', 'int', 'double', or 'identifier'");
                     break;
                 case -301:
-                    System.out.println("no int or double found for type declaration");
+                    System.out.println("Missing int or double found for type declaration");
                     break;  
                 case -302:
-                    System.out.println("no space between int and identifier for type declaration");
+                    System.out.println("Missing space between int and identifier for type declaration");
                     break;  
                 case -303:
-                    System.out.println("missing identifier for type declaration");
+                    System.out.println("Missing identifier for type declaration");
                     break;  
                 case -304:
-                    System.out.println("missing semicolon for type declaration assignment statement");
+                    System.out.println("Missing semicolon for type declaration assignment statement");
                     break;
                 case -401:
-                    System.out.println("missing 'if' word in if statement");
+                    System.out.println("Missing 'if' word in if statement");
                     break;  
                 case -402:
-                    System.out.println("missing '(' found  in if statement");
+                    System.out.println("Missing '(' on if statement");
                     break;  
                 case -403:
-                    System.out.println("no ')' found  in if statement");
+                    System.out.println("Missing ')' on if statement");
                     break;
                 case -404:
-                    System.out.println("no '}' found  in if statement");
+                    System.out.println("Missing '}' on if statement");
                     break;
                 case -405:
-                    System.out.println("no 'else' found in if statement");
+                    System.out.println("Missing 'else' on if statement");
                     break;  
                 case -450:
-                    System.out.println("no identifier on assignment statement");
+                    System.out.println("Missing identifier on assignment statement");
                     break;
                 case -451:
-                    System.out.println("no '=' found on assignment statement");
+                    System.out.println("Missing '=' on assignment statement");
                     break;
                 case -452:
-                    System.out.println("no '; found on assignment statement");
+                    System.out.println("Missing '; on assignment statement");
                     break;  
+                case -998:
+                    System.out.println("Symbol add at Type declaration");
+                    break;
+                case -750:
+                    System.out.println("Missing relational expression");
+                    break;
+                case -900:
+                    System.out.println("Missing number or identifier for arithmetic expression");
+                    break;  
+                case -999:
+                    System.out.println("Variable already exists");
+                    break; 
+                case -995:
+                    System.out.println("Symbol");
+                    break; 
+                case -997:
+                    System.out.println("Symbol");
+                    break;
 
 
                 default: 
@@ -160,7 +174,7 @@ public class Grammar {
         Token t = Token.list.get(index);
 
         // RESERVED WORDS INT, DOUBLE, IF, IDENTIFIER
-
+        
         // IF TOKEN IS IF
         // RETURN validate_if_statement();
         if(t.type == TType.reservedWords && t.text.equals("if"))
@@ -178,8 +192,7 @@ public class Grammar {
         if(t.type == TType.identifier )
             return validate_assignment_statement();
         
-        is_whitespace(0);// STRIP WHITESPACE
-        
+
         return -200;
     }
     public int find_statements_that_end_with_end(){
@@ -195,10 +208,22 @@ public class Grammar {
         if(index >= Token.list.size())
             return -106;
         is_whitespace(0);// STRIP WHITESPACE
-        while(TType.block != Token.list.get(index).type || !Token.list.get(index).text.equals("}")){
-            state = validate_statement();
+    
+        while(true){
+            int check = validate_statement();
+            is_whitespace(0);// STRIP WHITESPACE
+
+            if(check == -200 
+                    && (TType.block == Token.list.get(index).type && Token.list.get(index).text.equals("}"))){
+                return state;
+                
+            }
+            else if(check < 0)
+                return check;
+            else
+                return state;
         }
-        return state;
+        
     }
 
     
@@ -265,8 +290,7 @@ public class Grammar {
         if(index >= Token.list.size())
             return false;
         if(Token.list.get(index).type == TType.identifier){
-            // ADD SYMBOL
-            // IF EXISTS DONT ADD
+            
             index++;
             return true;
         }
@@ -370,7 +394,7 @@ public class Grammar {
         // IF LIST SIZE IS SMALLER THAN INDEX
         if(index >= Token.list.size())
             return false;
-        System.out.println(Token.list.get(index).text);
+        
         if(Token.list.get(index).text.equals(";")&& Token.list.get(index).type == TType.line_terminator){
             index++;
             return true;
@@ -439,12 +463,14 @@ public class Grammar {
             index++;
             state = find_statements_that_end_closing_brace();
             if(state < 0)
-                return state;
+                return state;// IF ERROR
             
             is_whitespace(0);
+         
             if(Token.list.get(index).type != TType.block 
                 || !Token.list.get(index).text.equals("}"))
                 return -404;
+           
         }
         // MUST BE SINGLE STATEMENT
         else{
@@ -453,6 +479,7 @@ public class Grammar {
                 if(state < 0)
                     return state;
         }
+      
         index++;
         
         // OPTION ELSE TOKEN
@@ -461,18 +488,25 @@ public class Grammar {
         // IF TOKEN IS NOT }
         // RETURN ERROR
         is_whitespace(0);
+        
         if(Token.list.get(index).type == TType.reservedWords 
                 && Token.list.get(index).text.equals("else")){
+            index++;
+            is_whitespace(0);
             if(Token.list.get(index).type == TType.block 
                     && Token.list.get(index).text.equals("{")){
+                index++;
                 state = find_statements_that_end_closing_brace();
                 if(state < 0)
                     return state;
                 
                 is_whitespace(0);
                 if(Token.list.get(index).type != TType.block 
-                    || !Token.list.get(index).text.equals("}"))
+                    || !Token.list.get(index).text.equals("}")){
+         
                     return -404;
+                }
+                index++;
             }
             // MUST BE SINGLE STATEMENT
             else{
@@ -482,7 +516,7 @@ public class Grammar {
                         return state;
             }
         }
-
+        
         return state;
     }
     
@@ -497,11 +531,12 @@ public class Grammar {
         // IF TOKEN IS NOT INT/DOUBLE
         // RETURN ERROR
         is_whitespace(0);
+    
+        
         if(Token.list.get(index).type != TType.reservedWords 
                 || !Token.list.get(index).text.equals(type))
             return -301;
-        // is identifier type-------------------------------------
-        add_symbol_identifierType();
+
         index++;
         
         // WHITE SPACE REQUIRED AFTER 'INT'
@@ -513,8 +548,8 @@ public class Grammar {
         
         if(Token.list.get(index).type != TType.identifier)
             return -303;
-        
-        
+        // if identifier in symbol table return error
+        // else add identifier to table
         // GO TO NEXT TOKEN
         index++;
         
@@ -524,16 +559,7 @@ public class Grammar {
         is_whitespace(0);
         if(Token.list.get(index).type == TType.line_terminator 
                 && Token.list.get(index).text.equals(";")){
-            
-            // VALID STATEMENT
-            // ADD SYMBOL
-            state = add_symbol_identifier();
-            if(state < 0)
-                return -998;
 
-        
-            
-            
             index++;
             return state;
         }
@@ -543,11 +569,10 @@ public class Grammar {
         is_whitespace(0);
         if(Token.list.get(index).type == TType.assignment_token 
                 && Token.list.get(index).text.equals("=")){
+
             index++;
             state = arthimetic_expression();// NEEDS WHITE SPACE
-            
-            //------------------------
-            
+ 
         }
         
         
@@ -560,6 +585,7 @@ public class Grammar {
                 && Token.list.get(index).text.equals(";")){
 
             index++;
+
             return state;
         }
            
@@ -571,6 +597,7 @@ public class Grammar {
         //IF TOKEN IS NOT AN IDENTIFIER
         // RETURN ERROR
         is_whitespace(0);
+
         if(Token.list.get(index).type != TType.identifier)
             return -450;
         index++;
@@ -584,6 +611,7 @@ public class Grammar {
                 && Token.list.get(index).text.equals("=")){
             index++;
             state = arthimetic_expression();
+            
         }
         else
             return -451;
@@ -597,10 +625,11 @@ public class Grammar {
         if(Token.list.get(index).type == TType.line_terminator 
                 && Token.list.get(index).text.equals(";")){
             index++;
+            
             return find_statements_that_end_with_end();
         }
            
-        return -453; // END ASSIGNMENT STATEMENT
+        return -452; // END ASSIGNMENT STATEMENT
     }
 
 
@@ -623,7 +652,7 @@ public class Grammar {
    
     }
     public boolean is_relational(){
-        // IS NUMBER OR IDENTIFIER  (x==u)
+        // IS NUMBER OR IDENTIFIER  
         is_whitespace(0);
         
         // TERMINATION
@@ -644,6 +673,9 @@ public class Grammar {
             index++;
             return is_relational();
         }
+        
+        // OPTIONAL RELATIONAL EXPRESSION-----------------------------------------------
+     
         
         // IF NUMBER, AND RELATIONAL OPERATOR
         if(!is_num_or_identifier())
@@ -680,20 +712,7 @@ public class Grammar {
     }
 
     private int arthimetic_expression() {
-        // 1+1*7/5*3-9;
-        // (x+3)
-        // ((3+0))
-        //  X+3;
-        // (3+6*(x+3)+3)
-        // 3*33.6 / X;
-        // 3 
-        // x
-        
-        // (,NUMBER,IDENTIFIER
-        // )
-        // IS NUMBER OR IDENTIFIER
         is_whitespace(0);
-       
         // TERMINATION
         // WHEN RIGHT PAREN, INCREMENT, RETURN TRUE
         if(Token.list.get(index).type == TType.line_terminator)
@@ -739,48 +758,7 @@ public class Grammar {
  
     
     
-    //------------------------------------------------------------
-    public void add_symbol_identifierType(){// line 510 in code
-        identifierType = Token.list.get(index);
-    }
-    public int add_symbol_identifier(){// line 510 in code
-        identifier = Token.list.get(index-1);
-        
-        Symbol s = new Symbol(identifier.text,identifierType.text);
-        
-        if(Symbol.list.contains(s))
-            return -999;
-        
-        Symbol.list.add(s);
-        return state;// Symbol added
-    }
-    public int add_symbol_value(){
-        Token value = Token.list.get(index-1);
-        // is integer or double
-        int is_int = 0;
-        double is_double = 0;
-        
-        if(value.text.contains("."))
-            is_double = Double.parseDouble(value.text);
-        else
-            is_int = Integer.parseInt(value.text);
-        
-        // IF ERROR OCCURRED THIS WONT HAPPEN
-        // ALWAYS LAST
-        Symbol s = Symbol.list.getLast();
-        
-        if(is_double > 0){
-            s.dValue = is_double;
-            return state;// Symbol added
-        }
-        else if(is_int > 0){
-            s.iValue = is_int;
-            return state;
-        }
-        else
-            return -997;
-    }
-    
+
     
 }
 
