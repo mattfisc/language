@@ -16,15 +16,19 @@ public class Circle {
     public int y;
     public int diameter = 20;
     
-    public int xVel = 1;
-    public int yVel = 1;
+    public int xVel;
+    public int yVel;
     
     public Color color;
     
     public Circle(){
-        this.x = 100;
-        this.y = 100;
+        // random size
+        this.x = (int) Math.floor((Math.random()  *200)-50);
+        this.y = (int) Math.floor((Math.random()  *400)-50);
         
+        // DIAMETER
+        this.diameter = (int)Math.floor((Math.random()  *25)+10);
+        // color random
         int R = (int)(Math.random()*256);
         int G = (int)(Math.random()*256);
         int B= (int)(Math.random()*256);
@@ -32,32 +36,46 @@ public class Circle {
         Color color = new Color(R, G, B); //random color, but can be bright or dull
         this.color = color;
         
+        // velocity 1-5
+        this.xVel = (int) Math.floor((Math.random() * 1) +3);
+        this.yVel = (int) Math.floor((Math.random() * 1) +3);
     }
     public Circle(int x, int y){
         this.x = x;
         this.y = y;
+        this.xVel = (int) Math.floor((Math.random() * 10) - 5);
+        this.yVel = (int) Math.floor((Math.random() * 10) - 5);
         
     }
     
     
     public void move(){
-        if(this.x + this.xVel < 0){
-            this.xVel = 1;
-        }
-        else if(this.x + this.xVel > 500){
-            this.xVel = -1;
-        }
-        else if(this.y + this.yVel < 0){
-            this.yVel = 1;
-        }
-        else if(this.y + this.yVel >  500){
-            this.yVel = -1;
-        }
-        
-        this.x = this.x + this.xVel;
-        this.y = this.y + this.yVel;
-        
+        if (x > 400 || x < 0) {
+                xVel *= -1;
+            }
+            if (y > 400 || y < 0) {
+                yVel *= -1;
+            }
+            if (x > 400) {
+                x = 400;
+            }
+            if (x < 0) {
+                x = 0;
+            }
+            if (y > 400) {
+                y = 400;
+            }
+            if (y < 0) {
+                y = 0;
+            }
+
+            this.x += xVel;
+            this.y += yVel;
         
     }
+    public void draw(Graphics g) {
+            g.setColor(color);
+            g.fillOval(x, y, diameter, diameter);
+        }
     
 }

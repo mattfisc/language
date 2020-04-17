@@ -12,7 +12,7 @@ public class GithubExample {
     
 }
 // PROGRAM EXAMPLE
-/*
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -39,20 +39,20 @@ class Program {
 
         Generate balls
         for (int i = 0; i < 50; i++) {
-            Ball ball = new Ball(*/
+            Ball ball = new Ball(
                     
-                    /* Random positions from 0 to windowWidth or windowHeight 
+                    // Random positions from 0 to windowWidth or windowHeight 
                     (int) Math.floor(Math.random() * windowWidth),
                     (int) Math.floor(Math.random() * windowHeight),
-                    /* Random size from 10 to 30 
+                    // Random size from 10 to 30 
                     (int) Math.floor(Math.random() * 20) + 10,
-                    /* Random RGB colors
+                    // Random RGB colors
                     new Color(
                             (int) Math.floor((Math.random() * 256)),
                             (int) Math.floor((Math.random() * 256)),
                             (int) Math.floor((Math.random() * 256))
                     ),
-                    /* Random velocities from -5 to 5 
+                    // Random velocities from -5 to 5 
                     (int) Math.floor((Math.random() * 10) - 5),
                     (int) Math.floor((Math.random() * 10) - 5)
             );
@@ -60,7 +60,7 @@ class Program {
             balls.add(ball);
         }
 
-        /* Initialize program 
+        // Initialize program 
         mainFrame = new JFrame();
         drawPanel = new DrawPanel();
         mainFrame.getContentPane().add(drawPanel);
@@ -72,9 +72,9 @@ class Program {
         while (true) {
             for (Ball b: balls) {
                 b.update();
-            }*/
+            }
 
-            /* Give Swing 10 milliseconds to see the update! 
+            // Give Swing 10 milliseconds to see the update! 
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
@@ -149,4 +149,88 @@ class Program {
             g.fillOval(posX, posY, size, size);
         }
     }
+}
+/*
+package Window;
+
+import javax.swing.JFrame;
+import java.awt.event.*;
+import java.awt.*;
+import javax.swing.*;
+import java.awt.Graphics;
+import java.awt.geom.Ellipse2D;
+import java.util.ArrayList;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+
+public class Window {
+    public static void main(String[] args) {
+        Program program = new Program();
+        program.run();
+    }
+}
+
+class Program {
+    private JFrame mainFrame;
+    private DrawPanel drawPanel;
+    private java.util.List<Circle> balls;
+
+    private JButton button = new JButton("Add Ball");
+    private int windowWidth = 500;
+    private int windowHeight = 500;
+    private String windowLabel = "Bounce Program";
+
+    void run() {
+
+        balls = new ArrayList<Circle>();
+
+        //Generate balls
+        for (int i = 0; i < 50; i++) {
+            Circle ball = new Circle();
+
+            balls.add(ball);
+        }
+
+        // Initialize program 
+        mainFrame = new JFrame();
+        drawPanel = new DrawPanel();
+        //drawPanel.add(button);
+        mainFrame.getContentPane().add(drawPanel);
+        mainFrame.setTitle(windowLabel);
+        mainFrame.setSize(windowWidth, windowHeight);
+        mainFrame.setVisible(true);
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        while (true) {
+            for (Circle b: balls) {
+                b.move();
+            }
+
+            // Give Swing 10 milliseconds to see the update! 
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            mainFrame.repaint();
+        }
+    }
+
+    class DrawPanel extends JPanel {
+        @Override
+        public void paintComponent(Graphics graphics) {
+            super.paintComponent(graphics);
+
+            for (Circle b: balls) {
+                b.draw(graphics);
+            }
+
+        }
+    }
+
+    
+    
 }*/

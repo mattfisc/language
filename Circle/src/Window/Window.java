@@ -15,89 +15,108 @@ import java.util.ArrayList;
  *
  * @author Matthew Fischer
  */
-public class Window extends JFrame implements ActionListener{
-    
-    ArrayList<Circle> balls = new ArrayList();
+import javax.swing.*;
+import java.awt.*;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 
-    JButton addBall = new JButton("Add Ball");
-    JFrame frame;
-    JPanel drawPanel;
-    
-    public Window(){
-        
-        frame = new JFrame("Moving Ball");
-        
-        drawPanel = new JPanel();
-        frame.add(drawPanel);
-        frame.setVisible(true);
-        frame.setSize(500, 500);
-        // ADD BUTTON
-        frame.add(addBall, BorderLayout.NORTH);
-        
-        // COLOR BACKGROUND
-        frame.setBackground(Color.black);
-        
-        addBall.addActionListener(this);
-        
-        // MOVE BALLS
-        for(Circle c : balls){
-            
-            c.move();
-        }
-    }
-
-    public void paintComponent(Graphics graphics) {
-        paintComponent(graphics);
-
-        for (Circle b: balls) {
-            paint(graphics);
-        }
-
-    }
-    
-    
-    public void paint(Graphics g){
-        paint(g);
-        
-        for(Circle c : balls){
-            g.setColor(c.color);
-            g.fillOval(c.x,c.y,c.diameter,c.diameter);
-        }
-        
-
-    }
-    
+public class Window {
     public static void main(String[] args) {
-        Window app = new Window();
-     
-        app.run();
+        Program program = new Program();
+        //program.run();
     }
-    
-    public void run(){
-        
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        while(true){
-            
-            try{
-                
+}
+
+class Program {
+    private JFrame mainFrame;
+    private DrawPanel drawPanel;
+    private ArrayList<Circle> balls;
+
+    private JButton button = new JButton("Add Ball");
+    private int windowWidth = 500;
+    private int windowHeight = 500;
+    private String windowLabel = "Bounce Program";
+
+    public Program() {
+
+        balls = new ArrayList<Circle>();
+
+        //Generate balls in action
+
+        // Initialize program 
+        mainFrame = new JFrame();
+        drawPanel = new DrawPanel();
+        drawPanel.add(button);
+        drawPanel.setBackground(Color.black);
+        mainFrame.getContentPane().add(drawPanel);
+        mainFrame.setTitle(windowLabel);
+        mainFrame.setSize(windowWidth, windowHeight);
+        mainFrame.setVisible(true);
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        button.addActionListener(new Action() {
+            @Override
+            public Object getValue(String key) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void putValue(String key, Object value) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void setEnabled(boolean b) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public boolean isEnabled() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void addPropertyChangeListener(PropertyChangeListener listener) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void removePropertyChangeListener(PropertyChangeListener listener) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                balls.add(new Circle());
+            }
+        });
+        while (true) {
+            for (Circle b: balls) {
+                b.move();
+            }
+
+            // Give Swing 10 milliseconds to see the update! 
+            try {
                 Thread.sleep(10);
-            
-            } catch (InterruptedException e){
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            frame.repaint();
+
+            mainFrame.repaint();
         }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // NEW CIRCLE
-        Circle c = new Circle();
-        // ADD CIRCLE
-        balls.add(c);
+    class DrawPanel extends JPanel {
+        @Override
+        public void paintComponent(Graphics graphics) {
+            super.paintComponent(graphics);
+
+            for (Circle b: balls) {
+                b.draw(graphics);
+            }
+
+        }
     }
 
-   
+    
     
 }
