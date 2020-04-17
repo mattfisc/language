@@ -138,7 +138,7 @@ public class Ball extends Graphics{
 
     @Override
     public void drawOval(int x, int y, int width, int height) {
-        super.drawOval(x, y, width, height);
+      
     }
 
     @Override
