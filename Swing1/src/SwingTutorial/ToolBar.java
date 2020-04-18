@@ -44,11 +44,11 @@ public class ToolBar extends JPanel implements ActionListener{
         JButton clicked = (JButton)e.getSource();
         if(clicked == helloBtn){
             if(textListener != null)
-                textListener.textEmitted("Hello");
+                textListener.textEmitted("Hello\n");
         }
         else
             if(textListener != null)
-                textListener.textEmitted("Goodbye");
+                textListener.textEmitted("Goodbye\n");
         
     }
     

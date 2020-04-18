@@ -42,7 +42,16 @@ public class MainFrame extends JFrame{
             toolBar.setStringListener(new StringListener(){
                 @Override
                 public void textEmitted(String text) {
-                    textPanel.append(text);
+                    textPanel.appendText(text);
+                }
+            });
+            
+            formPanel.setFormListener(new FormListener(){
+                public void formEventOccurred(FormEvent e){
+                    String name = e.getName();
+                    String occupation = e.getOccupation();
+                    int ageCat = e.getAgeCategory();
+                    textPanel.appendText(name + " : " + occupation + " age: " + ageCat + "\n");
                 }
             });
             
