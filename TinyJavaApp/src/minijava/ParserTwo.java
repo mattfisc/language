@@ -24,14 +24,14 @@ public class ParserTwo {
         for(Token t : Token.list){
             
             // LOOK FOR PROGRAM
-            if(t.text == "PROGRAM")
+            if(t.text == "class")
                 program = true;
             
             // IS PROGRAM
             if(program == true){
                 
                 // LOOK FOR BEGINING
-                if(t.text == "BEGIN")
+                if(t.text == "main")
                     begin = true;
                 
                 // IS PROGRAM
