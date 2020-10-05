@@ -12,7 +12,7 @@ import java.util.LinkedList;
  */
 public class Token {
     
-    public static LinkedList<Token> list = new LinkedList<Token>();
+    public  LinkedList<Token> list = new LinkedList<Token>();
     
     public TType type;
     public String text;
